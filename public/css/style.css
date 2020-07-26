@@ -1,5 +1,6 @@
 body{
     background-color: rgb(14, 19, 53);
+    color:white;
 }
 .jumbotron{
     background-image: url('../images/battleField.png');
@@ -39,3 +40,4 @@ body{
     outline: none !important;
 
 } */
+

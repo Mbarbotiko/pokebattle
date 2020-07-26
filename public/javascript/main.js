@@ -77,7 +77,7 @@
 
                 pText.appendChild(textNode);
 
-               //before appending the first card remove the spinner
+                //before appending the first card remove the spinner
                 document.querySelector('.pokemon-cards').appendChild(colmb4);
             })();
 
@@ -86,18 +86,24 @@
         });
 
     }
+    class APIerror extends Error { }
 
     getPokemon().catch(error => {
-        console.log(error);
+
+        // console.log(error);
         removeLoadingSpinner();//remove spinner before displaying error message
+     //   const emoji = String.fromCodePoint(0x2F804);
+     const emoji = ' :( '
         let errorMessageHeading = document.createElement('h1');
-        let errorMessageText = document.createTextNode('Oops something went wrong, try again later');
+        let errorMessageText = document.createTextNode(`No Pokemon were found ${emoji}`);
         errorMessageHeading.appendChild(errorMessageText)
-
-
         document.querySelector('.jumbotron').appendChild(errorMessageHeading);
-    })
+        if (error instanceof APIerror) {
+            throw new APIerror('No Pokemon were found :( ')
+        }
 
+    })
+    
 
 
 
