@@ -30,7 +30,8 @@
     async function getPokemon() {
         addLoadingSpinner();//display loader
 
-        const allPokemonURL = 'https://psokeapi.co/api/v2/pokemon?limit=150&offset=0';
+        // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
+        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=5&offset=0';
         const response = await fetch(allPokemonURL);
         const responseData = await response.json();
         const pokeURL = responseData.results;
@@ -45,6 +46,8 @@
                 let pokeImage = responseData.sprites.front_default;
                 console.log(responseData, pokeName)
                 pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
+                let pokeHP = responseData.stats[0].base_stat;
+                //pokeHP takes too long to get so loading out of order fix this
 
                 //create cards from API call:
 
@@ -52,7 +55,11 @@
                 colmb4.className = "col mb-4";
 
                 let cardh100 = document.createElement('div');
-                cardh100.className = "card h-100";
+                cardh100.className = "card h-100 pokemon-card";
+                cardh100.setAttribute('data-name', pokeName);
+                cardh100.setAttribute('data-image', pokeImage);
+                cardh100.setAttribute('data-hp', pokeHP);
+
 
                 let imgCard = document.createElement('img');
                 imgCard.src = pokeImage;
@@ -81,19 +88,24 @@
                 document.querySelector('.pokemon-cards').appendChild(colmb4);
             })();
 
+          
+
 
 
         });
+    
+
 
     }
+
     class APIerror extends Error { }
 
     getPokemon().catch(error => {
 
         // console.log(error);
         removeLoadingSpinner();//remove spinner before displaying error message
-     //   const emoji = String.fromCodePoint(0x2F804);
-     const emoji = ' :( '
+        //   const emoji = String.fromCodePoint(0x2F804);
+        const emoji = ' :( '
         let errorMessageHeading = document.createElement('h1');
         let errorMessageText = document.createTextNode(`No Pokemon were found ${emoji}`);
         errorMessageHeading.appendChild(errorMessageText)
@@ -102,11 +114,26 @@
             throw new APIerror('No Pokemon were found :( ')
         }
 
-    })
-    
+    });
 
 
+    function addClickPokemon() {
+        const pokemonCard = document.querySelectorAll('.pokemon-card');
+        pokemonCard.forEach(pokemon => {
+            pokemon.addEventListener('click', function (e) {
+                console.log(e)
+                const pokemon = e.target.closest('.pokemon-card');
+                const name = pokemon.getAttribute('data-name');
+                const url = pokemon.getAttribute('data-image');
+                const hp = pokemon.getAttribute('data-hp');
 
+                console.log(name, url, hp)
+            })
+
+        })
+    }
+//not adding listener because of async call fix this
+    addClickPokemon()
 
 
 

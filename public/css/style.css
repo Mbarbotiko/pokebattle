@@ -8,9 +8,6 @@ body{
     background-position:center ;
 }
 
-.pokemon-cards>div:hover{
-    cursor: pointer;
-}
 
 .jumbotron .btn{
     margin: auto;
@@ -40,4 +37,11 @@ body{
     outline: none !important;
 
 } */
+.pokemon-card{
+    background-color: rgb(14, 19, 53);
+    text-align: center;
+}
 
+.pokemon-card:hover{
+    cursor: pointer;
+}
