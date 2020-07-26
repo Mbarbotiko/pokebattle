@@ -13,82 +13,89 @@
 
     //async/await instead:
 
+    function addLoadingSpinner() {
+        const loading = document.createElement('img');
+        loading.src = './public/images/loadingSpinner.gif';
+        loading.className = 'loading';
+        document.querySelector('.pokemon-cards').appendChild(loading);
+        //removeLoadingSpinner(loading);
+        //run remove loading spinner and pass the variable it should be removed from as a param
+
+    }
+    function removeLoadingSpinner() {
+        const spinner = document.querySelector('.loading');
+        document.querySelector('.pokemon-cards').removeChild(spinner);
+    }
+
     async function getPokemon() {
-        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
+        addLoadingSpinner();//display loader
+
+        const allPokemonURL = 'https://psokeapi.co/api/v2/pokemon?limit=150&offset=0';
         const response = await fetch(allPokemonURL);
         const responseData = await response.json();
         const pokeURL = responseData.results;
+        removeLoadingSpinner();
         pokeURL.forEach(item => {
-          //  console.log(item.url);
+            //  console.log(item.url);
             const singlePokeURL = item.url;
-            (async function(){
+            (async function () {
                 const response = await fetch(singlePokeURL);
                 const responseData = await response.json();
                 let pokeName = responseData.forms[0].name;
-                const pokeImage = responseData.sprites.front_default;console.log(responseData)
-                // pokeName = pokeName.charAt(0).toUppercase() + pokeName.substring(1);
-               // console.log(responseData)
-            //    console.log(pokeName)
-            //    console.log(pokeImage)
-            // const pokeCard = `        <div class="row row-cols-1 row-cols-md-6">
-            // <div class="col mb-4">
-            //     <div class="card h-100">
-            //         <img src="${pokeImage}"
-            //             class="card-img-top" alt="...">
-            //         <div class="card-body">
-            //             <p class="card-text">Bulbasaur</p>
-            //         </div>
-            //     </div>
-            // </div>`
+                let pokeImage = responseData.sprites.front_default;
+                console.log(responseData, pokeName)
+                pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
 
-         
+                //create cards from API call:
 
-      
-            let colmb4 = document.createElement('div');
-            colmb4.className="col mb-4";
+                let colmb4 = document.createElement('div');
+                colmb4.className = "col mb-4";
 
-            let cardh100 = document.createElement('div');
-            cardh100.className = "card h-100";
+                let cardh100 = document.createElement('div');
+                cardh100.className = "card h-100";
 
-            let imgCard = document.createElement('img');
-            imgCard.src = pokeImage;
-            imgCard.className = "card-img-top";
+                let imgCard = document.createElement('img');
+                imgCard.src = pokeImage;
+                imgCard.className = "card-img-top";
 
-            let cardBody = document.createElement('div');
+                let cardBody = document.createElement('div');
 
-            cardBody.className = "card-body";
+                cardBody.className = "card-body";
 
-            let pText = document.createElement('p');
-            pText.className = "card-text";
+                let pText = document.createElement('p');
+                pText.className = "card-text";
 
-            let textNode = document.createTextNode(pokeName)
+                let textNode = document.createTextNode(pokeName)
 
-            colmb4.appendChild(cardh100);
+                colmb4.appendChild(cardh100);
 
-            cardh100.appendChild(imgCard);
+                cardh100.appendChild(imgCard);
 
-            cardh100.appendChild(cardBody);
+                cardh100.appendChild(cardBody);
 
-            cardBody.appendChild(pText);
+                cardBody.appendChild(pText);
 
-            pText.appendChild(textNode);
-    
+                pText.appendChild(textNode);
 
-
-            document.querySelector('.pokemon-cards').appendChild(colmb4);
-
-
-
+               //before appending the first card remove the spinner
+                document.querySelector('.pokemon-cards').appendChild(colmb4);
             })();
-        
-           
- 
+
+
+
         });
-       
+
     }
 
     getPokemon().catch(error => {
         console.log(error);
+        removeLoadingSpinner();//remove spinner before displaying error message
+        let errorMessageHeading = document.createElement('h1');
+        let errorMessageText = document.createTextNode('Oops something went wrong, try again later');
+        errorMessageHeading.appendChild(errorMessageText)
+
+
+        document.querySelector('.jumbotron').appendChild(errorMessageHeading);
     })
 
 
@@ -165,4 +172,4 @@
 
     // }
 
-}) ();
+})();

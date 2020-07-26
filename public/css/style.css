@@ -1,0 +1,41 @@
+body{
+    background-color: rgb(14, 19, 53);
+}
+.jumbotron{
+    background-image: url('../images/battleField.png');
+    background-repeat: no-repeat;
+    background-position:center ;
+}
+
+.pokemon-cards>div:hover{
+    cursor: pointer;
+}
+
+.jumbotron .btn{
+    margin: auto;
+    display: block;
+    width:50%;
+    background-color: rgba(14, 19, 53, 0.75);
+    color:white;
+    border-color: white;
+
+}
+
+.jumbotron .btn:hover{
+
+    background-color: rgba(14, 19, 53);
+
+}
+
+.jumbotron .btn:active{
+
+    background-color: rgb(173, 16, 16) !important;
+    border-color: white !important;
+
+
+}
+/* a.btn.btn-primary.btn-lg[role="button"]:focus{
+    border: none !important;
+    outline: none !important;
+
+} */
