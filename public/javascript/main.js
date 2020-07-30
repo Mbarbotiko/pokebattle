@@ -28,14 +28,16 @@
     }
 
     async function getPokemon() {
+
         addLoadingSpinner();//display loader
 
         // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
-        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=5&offset=0';
+        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = await fetch(allPokemonURL);
         const responseData = await response.json();
         const pokeURL = responseData.results;
         removeLoadingSpinner();
+
         pokeURL.forEach(item => {
             //  console.log(item.url);
             const singlePokeURL = item.url;
@@ -43,10 +45,11 @@
                 const response = await fetch(singlePokeURL);
                 const responseData = await response.json();
                 let pokeName = responseData.forms[0].name;
-                let pokeImage = responseData.sprites.front_default;
-                console.log(responseData, pokeName)
+                const pokeImage = responseData.sprites.front_default;
                 pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
-                let pokeHP = responseData.stats[0].base_stat;
+                const pokeHP = responseData.stats[0].base_stat;
+                const pokeType = responseData.types[0].type.name;
+
                 //pokeHP takes too long to get so loading out of order fix this
 
                 //create cards from API call:
@@ -59,6 +62,7 @@
                 cardh100.setAttribute('data-name', pokeName);
                 cardh100.setAttribute('data-image', pokeImage);
                 cardh100.setAttribute('data-hp', pokeHP);
+                cardh100.setAttribute('data-type', pokeType);
 
 
                 let imgCard = document.createElement('img');
@@ -86,14 +90,21 @@
 
                 //before appending the first card remove the spinner
                 document.querySelector('.pokemon-cards').appendChild(colmb4);
+                colmb4.addEventListener('click', function (e) {
+                    const pokemon = e.target.closest('.pokemon-card');
+                    const name = pokemon.getAttribute('data-name');
+                    const url = pokemon.getAttribute('data-image');
+                    const hp = pokemon.getAttribute('data-hp');
+                    const type = pokemon.getAttribute('data-type');
+
+                    choosePokemon(name, url, hp, type)
+
+                });
+
             })();
 
-          
-
-
-
         });
-    
+
 
 
     }
@@ -114,26 +125,45 @@
             throw new APIerror('No Pokemon were found :( ')
         }
 
-    });
+    })
+
+    //  function addClickPokemon() {
+    //     const pokemonCard = document.querySelectorAll('.pokemon-card');
+    //     pokemonCard.forEach(pokemon => {
+    //         pokemon.addEventListener('click', function (e) {
+
+    //             const pokemon = e.target.closest('.pokemon-card');
+    //             const name = pokemon.getAttribute('data-name');
+    //             const url = pokemon.getAttribute('data-image');
+    //             const hp = pokemon.getAttribute('data-hp');
+
+    //             console.log('click')
+    //         })
+
+    //     })
+
+    // }
 
 
-    function addClickPokemon() {
-        const pokemonCard = document.querySelectorAll('.pokemon-card');
-        pokemonCard.forEach(pokemon => {
-            pokemon.addEventListener('click', function (e) {
-                console.log(e)
-                const pokemon = e.target.closest('.pokemon-card');
-                const name = pokemon.getAttribute('data-name');
-                const url = pokemon.getAttribute('data-image');
-                const hp = pokemon.getAttribute('data-hp');
 
-                console.log(name, url, hp)
-            })
+    //not adding listener because of async call fix this
 
-        })
+
+    //user chooses a pokemon
+    const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);
+
+    function choosePokemon(a, b, c, d) {
+        let player1 = [];
+        player1.push(a, b, c, d);
+        console.log(player1);
+        return player1;
+    };
+
+    function startGame(g) {
+        console.log(g)
+        console.log('test')
     }
-//not adding listener because of async call fix this
-    addClickPokemon()
+
 
 
 
