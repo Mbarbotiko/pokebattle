@@ -15,15 +15,64 @@
     }
 
 
-    const tryAgainButton = document.querySelector('.try-again');
-    tryAgainButton.addEventListener('click', () => {
-        getPokemon();
-    })
+    const appStateButton = document.querySelector('.start-game');
+    appStateButton.addEventListener('click', (e) => {
+        const element = event.target;
+
+        const appState = element.getAttribute('data-appState');
+        console.log('button state', appState)
+        switch (appState) {
+            case 'error': getPokemon();
+                break;
+            case 'player-select': //choose pokemon function
+                break;
+            case 'computer-select'://run computer choose pokemon function
+                break;
+            case 'ready'://run battle function
+                break;
+        }
+
+    });
+
+    //create function to call when button for startbattle text changes when app state changes
+
+    const dataStateButton = {
+        loading: {
+            dataAttribute: 'loading',
+            text: 'Loading Pokemon'
+        },
+        playerSelect: {
+            dataAttribute: 'player-select',
+            text: 'Choose your Pokemon'
+        },
+        computerSelect: {
+            dataAttribute: 'computer-select',
+            text: 'Opponent is choosing their Pokemon'
+        },
+        error: {
+            dataAttribute: 'error',
+            text: 'Reload Pokemon'
+        },
+        ready: {
+            dataAttribute: 'ready',
+            text: 'Start the battle!'
+        }
+    }
+    //pass what state the button should be in 
+    const startBattleButtonState = (dataState) => {
+        console.log(dataState)
+        const button = document.querySelector('.start-game');
+        button.setAttribute('data-appState', dataState.dataAttribute);
+        button.innerText = dataState.text
+    }
+
+
 
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
+        showOrHideElement('hide', '.error');
         // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
-        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
+        const allPokemonURL = 'https://pokdeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = fetch(allPokemonURL)
             .then((response) => {
                 const responseData = response.json();
@@ -35,6 +84,9 @@
             }).then((pokeURL) => {
                 return pokeURL;
             }).then((pokeURL) => {
+                showOrHideElement('hide', '.error');
+                startBattleButtonState(dataStateButton.playerSelect);
+
                 pokeURL.forEach(item => {
                     const singlePokeURL = item.url;
                     const response = fetch(singlePokeURL)
@@ -95,15 +147,15 @@
                                 console.log(name, hp, type);
                             })
 
-                        }).then(() => {
-                            showOrHideElement('hide', '.error');
                         })
 
-                });
+                })
+
             })
             .catch(() => {
-                console.log('uhoh');
+
                 showOrHideElement('show', '.error');
+                startBattleButtonState(dataStateButton.error);
 
             }).finally(() => {
                 showOrHideElement('hide', '.loading');
@@ -114,41 +166,8 @@
 
     //user chooses a pokemon
 
-    //create function to call when button for startbattle text changes when app state changes
 
-    const dataStateButton = {
-        loading: {
-            dataAttribute: 'loading',
-            text: 'Loading Pokemon'
-        },
-        playerSelect: {
-            dataAttribute: 'player-select',
-            text: 'Choose your Pokemon'
-        },
-        computerSelect: {
-            dataAttribute: 'computer-select',
-            text: 'Opponent is choosing their Pokemon'
-        }
-    }
-    const startBattleButtonState = (dataState) => {
-        const button = document.querySelector('.start-game');
-        button.setAttribute('data-appState', dataState.dataAttribute);
-        switch (dataState.dataAttribute) {
-            case 'loading': button.innerText = dataState.text;
-                break;
-            case 'player-select': button.innerText = dataState.text;
-                break;
-            case 'computer-select': button.innerText = dataState.text;
-                break;
-            default: console.log('app state issue')
-        }
 
-    }
-
-    setTimeout(function () {
-        startBattleButtonState(dataStateButton.playerSelect);
-
-    }, 5000)
 
     const choosePokemon = (a, b, c, d) => {
         let player1 = [];
