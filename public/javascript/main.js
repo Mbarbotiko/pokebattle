@@ -97,7 +97,7 @@
                 break;
             case 'computer-select'://run computer choose pokemon function
                 break;
-            case 'ready': startGame(choosePokemon);//need player and computer arrays returned here
+            case 'ready':startGame(savePlayersChoices())
                 break;
         }
 
@@ -148,6 +148,21 @@
 
     }
 
+    const savePlayersChoices = (playersPokemon, computersPokemon) => {
+        const array = [];
+        array.push(playersPokemon);
+        array.push(computersPokemon);
+        // const startGame = (array) => {
+        //     console.log(array)
+     
+        //  } need to pass this array to onclick function in the switch, or save it locally or in session.
+     
+    }
+
+
+    
+
+
     const choosePokemon = (name, url, hp, type) => {
         //function for event listener on click of cards
         // let player1 = [];
@@ -156,40 +171,39 @@
         appendPokemon('player-pokemon', name, url);
         //change button state to let user know the computer is choosing now
         startBattleButtonState(dataStateButton.computerSelect);
+        const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
+        const computerChoosePokemon = () => {
+            setTimeout(() => {
+                // const whichPokemon = Math.floor(Math.random() * 151);
+                const whichPokemon = Math.floor(Math.random() * 3);
+                //choose a random pokemon
+                const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
+                const location = 'opponent-pokemon';
+                const name = computersPokemon.getAttribute('data-name');
+                const url = computersPokemon.getAttribute('data-image');
+                const hp = computersPokemon.getAttribute('data-hp');
+                const type = computersPokemon.getAttribute('data-type');
+                // let computer = [];
+                // computer.push(name, url, hp, type);
+                const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
+                appendPokemon(location, name, url);
+                startBattleButtonState(dataStateButton.ready);
+                //console.log(player1);
+                savePlayersChoices(player1, computer);
+            }, 3500);//delay the choice so it looks like user is deliberating
+
+        }
         computerChoosePokemon();
         //return the users choice
 
-        const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
-        console.log(player1);
-        return player1;
+
+
     };
 
-    const computerChoosePokemon = () => {
-        setTimeout(() => {
-            // const whichPokemon = Math.floor(Math.random() * 151);
-            const whichPokemon = Math.floor(Math.random() * 3);
-            //choose a random pokemon
-            const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
-            const location = 'opponent-pokemon';
-            const name = computersPokemon.getAttribute('data-name');
-            const url = computersPokemon.getAttribute('data-image');
-            const hp = computersPokemon.getAttribute('data-hp');
-            const type = computersPokemon.getAttribute('data-type');
-            // let computer = [];
-            // computer.push(name, url, hp, type);
-            appendPokemon(location, name, url);
-            startBattleButtonState(dataStateButton.ready);
-            const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
-            console.log(computer)
-            return computer;
 
-        }, 3500);//delay the choice so it looks like user is deliberating
 
-    }
 
-    const startGame = (playerPokemon, computerPokemon) => {
-        console.log(playerPokemon);
-    }
+
 
 
 
