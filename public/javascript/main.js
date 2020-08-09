@@ -1,7 +1,7 @@
 (() => {
+    let playersChoices = [];
 
     class Pokemon {
-        //https://pokeapi.co/ doesnt have weaknesses though
         constructor(name, type, hp, strength) {
             this.name = name,
                 this.type = type,
@@ -11,8 +11,9 @@
 
         }
         attack(otherPokemon) {
+            console.log('this', this)
             let attackStrength = 10;
-            if (otherPokemon.weakness.includes(this.type)) {
+            if (otherPokemon.weakness.includes(this.type)) {//this.type is undefined in the game call
                 attackStrength = attackStrength * 3;
             }
             return otherPokemon.hp = otherPokemon.hp - attackStrength;
@@ -20,53 +21,18 @@
 
         getWeakness(type) {
             const weaknessByType = {
-                Electric: ['Ground', 'Grass'],
-                Water: ['Electric', 'Grass'],
-                Fire: ['Water'],
-                Grass: ['Fire'],
-                Ground: ['Water', 'Grass'],
-                Psychic: ['Psychic'],
-                Fighting: ['Psychic'],
-                Flying: ['Electric']
+                Electric: ['ground', 'grass'],
+                Water: ['electric', 'grass'],
+                Fire: ['water'],
+                Grass: ['fire'],
+                Ground: ['water', 'grass'],
+                Psychic: ['psychic'],
+                Fighting: ['psychic'],
+                Flying: ['electric']
             }
             return this.weakness = weaknessByType[type];
         }
     }
-
-
-
-    //     const pikachu = new Pokemon('Pikachu', 'Electric', 100, 'Water');
-    //     const squirtle = new Pokemon('Squirtle', 'Water', 100, 'Fire');
-    //     const bulbasaur = new Pokemon('Bulbasaur', 'Grass', 100, 'Ground');
-    //     const charmander = new Pokemon('Charmander', 'Fire', 100, 'Grass');
-
-
-    //     function pokeFight(pokemonOne, pokemonTwo) {
-    //         pokemonOne.getWeakness(pokemonOne.type);
-    //         pokemonTwo.getWeakness(pokemonTwo.type);
-    //         do {
-    //             pokemonOne.attack(pokemonTwo);
-    //             pokemonTwo.attack(pokemonOne);
-    //             console.log(`${pokemonOne.name} HP: ${pokemonOne.hp}, ${pokemonTwo.name} HP: ${pokemonTwo.hp}`);
-    //         } while (pokemonOne.hp > 0 && pokemonTwo.hp > 0);
-    //         //run this while hp of either pokemon is greater than 0
-    //         let winner = '';
-    //         //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
-    //         pokemonOne.hp > 0 ? winner = pokemonOne.name : winner = pokemonTwo.name;
-
-    //         return `The winner is : ${winner}`
-
-    //     }
-
-    //     console.log(pokeFight(bulbasaur, pikachu))
-
-    //     console.log(Pokemon.prototype, Object.getPrototypeOf(Pokemon), pikachu.hasOwnProperty('weakness'))
-
-
-    //     console.log('type' in pikachu)
-
-    // }
-
 
     const showOrHideElement = (showOrHide, selector) => {
         const elementToHide = document.querySelector(selector);
@@ -97,7 +63,7 @@
                 break;
             case 'computer-select'://run computer choose pokemon function
                 break;
-            case 'ready':startGame(savePlayersChoices())
+            case 'ready': startGame();
                 break;
         }
 
@@ -149,29 +115,19 @@
     }
 
     const savePlayersChoices = (playersPokemon, computersPokemon) => {
-        const array = [];
-        array.push(playersPokemon);
-        array.push(computersPokemon);
-        // const startGame = (array) => {
-        //     console.log(array)
-     
-        //  } need to pass this array to onclick function in the switch, or save it locally or in session.
-     
+        playersChoices.push(playersPokemon);
+        playersChoices.push(computersPokemon);
+        //send the choices to the choices array
     }
 
 
-    
-
-
     const choosePokemon = (name, url, hp, type) => {
-        //function for event listener on click of cards
-        // let player1 = [];
-        // player1.push(name, url, hp, type);
-        // console.log('player1', player1);
         appendPokemon('player-pokemon', name, url);
         //change button state to let user know the computer is choosing now
         startBattleButtonState(dataStateButton.computerSelect);
-        const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
+        // const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
+        const player1 = [];
+        player1.push(name, url, hp, type)
         const computerChoosePokemon = () => {
             setTimeout(() => {
                 // const whichPokemon = Math.floor(Math.random() * 151);
@@ -183,9 +139,9 @@
                 const url = computersPokemon.getAttribute('data-image');
                 const hp = computersPokemon.getAttribute('data-hp');
                 const type = computersPokemon.getAttribute('data-type');
-                // let computer = [];
-                // computer.push(name, url, hp, type);
-                const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
+                const computer = [];
+                computer.push(name, url, hp, type);
+                // const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
                 appendPokemon(location, name, url);
                 startBattleButtonState(dataStateButton.ready);
                 //console.log(player1);
@@ -194,18 +150,52 @@
 
         }
         computerChoosePokemon();
-        //return the users choice
-
-
 
     };
 
 
+    const startGame = () => {
+        const player = new Pokemon(playersChoices[0][0], playersChoices[0][3], playersChoices[0][2], 'Water')
+
+        const opponent = new Pokemon(playersChoices[1][0], playersChoices[1][3], playersChoices[1][2], 'Water')
+
+        console.log(player, opponent)
 
 
+        //     const pikachu = new Pokemon('Pikachu', 'Electric', 100, 'Water');
+        //     const squirtle = new Pokemon('Squirtle', 'Water', 100, 'Fire');
+        //     const bulbasaur = new Pokemon('Bulbasaur', 'Grass', 100, 'Ground');
+        //     const charmander = new Pokemon('Charmander', 'Fire', 100, 'Grass');
 
 
+        const pokeFight = (pokemonOne, pokemonTwo) => {
+            pokemonOne.getWeakness(pokemonOne.type);
+            pokemonTwo.getWeakness(pokemonTwo.type);
+            console.log('testing the objects', pokemonOne,  pokemonTwo)
+            do {
+                pokemonOne.attack(pokemonTwo);
+                pokemonTwo.attack(pokemonOne);
+                console.log(`${pokemonOne.name} HP: ${pokemonOne.hp}, ${pokemonTwo.name} HP: ${pokemonTwo.hp}`);
+            } while (pokemonOne.hp > 0 && pokemonTwo.hp > 0);
+            //run this while hp of either pokemon is greater than 0
+            let winner = '';
+            //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
+            pokemonOne.hp > 0 ? winner = pokemonOne.name : winner = pokemonTwo.name;
 
+            return `The winner is : ${winner}`
+
+        }
+
+        console.log(pokeFight(player, opponent))
+
+        //     console.log(Pokemon.prototype, Object.getPrototypeOf(Pokemon), pikachu.hasOwnProperty('weakness'))
+
+
+        //     console.log('type' in pikachu)
+
+        // }
+
+    }
 
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
