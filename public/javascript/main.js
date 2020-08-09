@@ -2,12 +2,10 @@
     let playersChoices = [];
 
     class Pokemon {
-        constructor(name, type, hp, strength) {
+        constructor(name, type, hp) {
             this.name = name,
                 this.type = type,
-                this.hp = hp,
-                this.strength = strength
-
+                this.hp = hp
 
         }
         attack(otherPokemon) {
@@ -20,17 +18,19 @@
         }
 
         getWeakness(type) {
+            //need to do some error handling on this, because if key is not found error is thrown
+            let defaultValue = ['none'];
             const weaknessByType = {
-                Electric: ['ground', 'grass'],
-                Water: ['electric', 'grass'],
-                Fire: ['water'],
-                Grass: ['fire'],
-                Ground: ['water', 'grass'],
-                Psychic: ['psychic'],
-                Fighting: ['psychic'],
-                Flying: ['electric']
+                electric: ['ground', 'grass'],
+                water: ['electric', 'grass'],
+                fire: ['water'],
+                grass: ['fire'],
+                ground: ['water', 'grass'],
+                psychic: ['psychic'],
+                fighting: ['psychic'],
+                flying: ['electric']
             }
-            return this.weakness = weaknessByType[type];
+            return this.weakness = weaknessByType[type] || defaultValue
         }
     }
 
@@ -155,9 +155,22 @@
 
 
     const startGame = () => {
-        const player = new Pokemon(playersChoices[0][0], playersChoices[0][3], playersChoices[0][2], 'Water')
+        const playerName = playersChoices[0][0];
+        const playerType = playersChoices[0][3];
+        let playerHP = playersChoices[0][2];
+        if (typeof (playerHP) !== 'number') {
+            playerHP = parseInt(playerHP);
+        }
+        const player = new Pokemon(playerName, playerType, playerHP);
 
-        const opponent = new Pokemon(playersChoices[1][0], playersChoices[1][3], playersChoices[1][2], 'Water')
+
+        const opponentName = playersChoices[1][0];
+        const opponentType = playersChoices[1][3];
+        let opponentHP = playersChoices[1][2];
+        if (typeof (opponentHP) !== 'number') {
+            opponentHP = parseInt(opponentHP);
+        }
+        const opponent = new Pokemon(opponentName, opponentType, opponentHP);
 
         console.log(player, opponent)
 
@@ -171,7 +184,7 @@
         const pokeFight = (pokemonOne, pokemonTwo) => {
             pokemonOne.getWeakness(pokemonOne.type);
             pokemonTwo.getWeakness(pokemonTwo.type);
-            console.log('testing the objects', pokemonOne,  pokemonTwo)
+            console.log('testing the objects', pokemonOne.type, pokemonTwo.type)
             do {
                 pokemonOne.attack(pokemonTwo);
                 pokemonTwo.attack(pokemonOne);
@@ -188,20 +201,13 @@
 
         console.log(pokeFight(player, opponent))
 
-        //     console.log(Pokemon.prototype, Object.getPrototypeOf(Pokemon), pikachu.hasOwnProperty('weakness'))
-
-
-        //     console.log('type' in pikachu)
-
-        // }
-
     }
 
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
         showOrHideElement('hide', '.error');
-        // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
-        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
+        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
+        // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = fetch(allPokemonURL)
             .then((response) => {
                 const responseData = response.json();
