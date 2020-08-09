@@ -66,13 +66,24 @@
         button.innerText = dataState.text
     }
 
+    const choosePokemon = (name,url, hp, type) => {
+        //function for event listener on click of cards
+        let player1 = [];
+        player1.push(name, url,hp,type);
+        console.log(player1);
+        //change button state to let user know the computer is choosing now
+        startBattleButtonState(dataStateButton.computerSelect);
+        //return the users choice
+        return player1;
+    };
+
 
 
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
         showOrHideElement('hide', '.error');
         // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
-        const allPokemonURL = 'https://pokdeapi.co/api/v2/pokemon?limit=3&offset=0';
+        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = fetch(allPokemonURL)
             .then((response) => {
                 const responseData = response.json();
@@ -144,7 +155,8 @@
                                 const url = pokemon.getAttribute('data-image');
                                 const hp = pokemon.getAttribute('data-hp');
                                 const type = pokemon.getAttribute('data-type');
-                                console.log(name, hp, type);
+                               // console.log(name, hp, type);
+                                choosePokemon(name, url, hp, type);
                             })
 
                         })
@@ -167,21 +179,12 @@
     //user chooses a pokemon
 
 
-
-
-    const choosePokemon = (a, b, c, d) => {
-        let player1 = [];
-        player1.push(a, b, c, d);
-        console.log(player1);
-        return player1;
-    };
-
     const startGame = (g) => {
         console.log(g)
         console.log('test')
     }
 
-    const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);
+    // const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);
 
 
 
