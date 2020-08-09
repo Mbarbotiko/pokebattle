@@ -20,25 +20,30 @@
 
     <div class="container">
         <div class="jumbotron">
-            <div>
+            <div class="chosen-pokemon" id="player-pokemon">
                 <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png" />
-                <p>Choose your pokemon.</p>
+                <h4>Your Pokemon</h4>
+            </div>
+
+            <div class="chosen-pokemon" id="opponent-pokemon">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png" />
+                <h4>Opponents Pokemon</h4>
             </div>
 
             <div>
-                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/shiny/1.png" />
-                <p>Opponents Pokemon.</p>
-            </div>
-
-            <a class="btn btn-primary btn-lg start-game" href="#" role="button" data-appState = 'loading'>Loading Pokemon</a>
-            <div class='error'>
-                <h1>Oops, something went wrong</h1>
-
+                <a class="btn btn-primary btn-lg start-game" href="#" role="button" data-appState='loading'>Loading
+                    Pokemon</a>
+                <div class='error'>
+                    <h1>Oops, something went wrong</h1>
+                </div>
 
             </div>
+
+
         </div>
+
         <div class='loading'>
-            <img src = './public/images/loadingSpinner.gif'>
+            <img src='./public/images/loadingSpinner.gif'>
 
         </div>
 
