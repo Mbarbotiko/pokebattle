@@ -1,153 +1,114 @@
 (function () {
-    // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
-    // fetch(allPokemonURL)
-    //     .then(response => {
-    //         return response.json();
-    //     })
-    //     .then(response => {
-    //         const results = response.results;
-    //         console.log(results)
-    //     }).catch(error => {
-    //         console.log(error)
-    //     }
-
-    //async/await instead:
-
-    function addLoadingSpinner() {
-        const loading = document.createElement('img');
-        loading.src = './public/images/loadingSpinner.gif';
-        loading.className = 'loading';
-        document.querySelector('.pokemon-cards').appendChild(loading);
-        //removeLoadingSpinner(loading);
-        //run remove loading spinner and pass the variable it should be removed from as a param
-
-    }
-    function removeLoadingSpinner() {
-        const spinner = document.querySelector('.loading');
-        document.querySelector('.pokemon-cards').removeChild(spinner);
-    }
-
-    async function getPokemon() {
-
-        addLoadingSpinner();//display loader
-
+    getPokemon();
+    function getPokemon() {
+        showOrHideElement('show', '.loading');
         // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
         const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
-        const response = await fetch(allPokemonURL);
-        const responseData = await response.json();
-        const pokeURL = responseData.results;
-        removeLoadingSpinner();
+        const response = fetch(allPokemonURL)
+            .then(function (response) {
+                const responseData = response.json();
+                return responseData;
+            }).then(function (responseData) {
+                const pokeURL = responseData.results;
+                //  console.log('response poke url', pokeURL);
+                return pokeURL;
+            }).then(function (pokeURL) {
+                return pokeURL;
+            }).then(function (pokeURL) {
+                pokeURL.forEach(item => {
+                    const singlePokeURL = item.url;
+                    const response = fetch(singlePokeURL)
+                        .then(function (response) {
+                            const responseData = response.json();
+                            return responseData;
+                        })
+                        .then(function (responseData) {
+                            let pokeName = responseData.forms[0].name;
+                            const pokeImage = responseData.sprites.front_default;
+                            pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
+                            const pokeHP = responseData.stats[0].base_stat;
+                            const pokeType = responseData.types[0].type.name;
 
-        pokeURL.forEach(item => {
-            //  console.log(item.url);
-            const singlePokeURL = item.url;
-            (async function () {
-                const response = await fetch(singlePokeURL);
-                const responseData = await response.json();
-                let pokeName = responseData.forms[0].name;
-                const pokeImage = responseData.sprites.front_default;
-                pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
-                const pokeHP = responseData.stats[0].base_stat;
-                const pokeType = responseData.types[0].type.name;
+                            let colmb4 = document.createElement('div');
+                            colmb4.className = "col mb-4";
 
-                //pokeHP takes too long to get so loading out of order fix this
-
-                //create cards from API call:
-
-                let colmb4 = document.createElement('div');
-                colmb4.className = "col mb-4";
-
-                let cardh100 = document.createElement('div');
-                cardh100.className = "card h-100 pokemon-card";
-                cardh100.setAttribute('data-name', pokeName);
-                cardh100.setAttribute('data-image', pokeImage);
-                cardh100.setAttribute('data-hp', pokeHP);
-                cardh100.setAttribute('data-type', pokeType);
+                            let cardh100 = document.createElement('div');
+                            cardh100.className = "card h-100 pokemon-card";
+                            cardh100.setAttribute('data-name', pokeName);
+                            cardh100.setAttribute('data-image', pokeImage);
+                            cardh100.setAttribute('data-hp', pokeHP);
+                            cardh100.setAttribute('data-type', pokeType);
 
 
-                let imgCard = document.createElement('img');
-                imgCard.src = pokeImage;
-                imgCard.className = "card-img-top";
+                            let imgCard = document.createElement('img');
+                            imgCard.src = pokeImage;
+                            imgCard.className = "card-img-top";
 
-                let cardBody = document.createElement('div');
+                            let cardBody = document.createElement('div');
 
-                cardBody.className = "card-body";
+                            cardBody.className = "card-body";
 
-                let pText = document.createElement('p');
-                pText.className = "card-text";
+                            let pText = document.createElement('p');
+                            pText.className = "card-text";
 
-                let textNode = document.createTextNode(pokeName)
+                            let textNode = document.createTextNode(pokeName)
 
-                colmb4.appendChild(cardh100);
+                            colmb4.appendChild(cardh100);
 
-                cardh100.appendChild(imgCard);
+                            cardh100.appendChild(imgCard);
 
-                cardh100.appendChild(cardBody);
+                            cardh100.appendChild(cardBody);
 
-                cardBody.appendChild(pText);
+                            cardBody.appendChild(pText);
 
-                pText.appendChild(textNode);
+                            pText.appendChild(textNode);
 
-                //before appending the first card remove the spinner
-                document.querySelector('.pokemon-cards').appendChild(colmb4);
-                colmb4.addEventListener('click', function (e) {
-                    const pokemon = e.target.closest('.pokemon-card');
-                    const name = pokemon.getAttribute('data-name');
-                    const url = pokemon.getAttribute('data-image');
-                    const hp = pokemon.getAttribute('data-hp');
-                    const type = pokemon.getAttribute('data-type');
 
-                    choosePokemon(name, url, hp, type)
+                            //before appending the first card remove the spinner
+                            document.querySelector('.pokemon-cards').appendChild(colmb4);
+                            colmb4.addEventListener('click', function (e) {
+                                const pokemon = e.target.closest('.pokemon-card');
+                                const name = pokemon.getAttribute('data-name');
+                                const url = pokemon.getAttribute('data-image');
+                                const hp = pokemon.getAttribute('data-hp');
+                                const type = pokemon.getAttribute('data-type');
+                                console.log(name, url, hp, type)
+                            })
+
+                        }).then(function () {
+                            showOrHideElement('hide', '.error');
+                        })
 
                 });
+            })
+            .catch(function () {
+                console.log('uhoh');
+                showOrHideElement('show', '.error');
 
-            })();
-
-        });
-
-
-
+            }).finally(function () {
+                showOrHideElement('hide', '.loading');
+            })
     }
 
-    class APIerror extends Error { }
-
-    getPokemon().catch(error => {
-
-        // console.log(error);
-        removeLoadingSpinner();//remove spinner before displaying error message
-        //   const emoji = String.fromCodePoint(0x2F804);
-        const emoji = ' :( '
-        let errorMessageHeading = document.createElement('h1');
-        let errorMessageText = document.createTextNode(`No Pokemon were found ${emoji}`);
-        errorMessageHeading.appendChild(errorMessageText)
-        document.querySelector('.jumbotron').appendChild(errorMessageHeading);
-        if (error instanceof APIerror) {
-            throw new APIerror('No Pokemon were found :( ')
-        }
-
+    const tryAgainButton = document.querySelector('.try-again');
+    tryAgainButton.addEventListener('click', function () {
+        getPokemon();
     })
 
-    //  function addClickPokemon() {
-    //     const pokemonCard = document.querySelectorAll('.pokemon-card');
-    //     pokemonCard.forEach(pokemon => {
-    //         pokemon.addEventListener('click', function (e) {
+    function showOrHideElement(showOrHide, selector) {
+        const elementToHide = document.querySelector(selector);
+        if (elementToHide) {
+            if (showOrHide === 'show') {
+                elementToHide.style.display = 'block';
 
-    //             const pokemon = e.target.closest('.pokemon-card');
-    //             const name = pokemon.getAttribute('data-name');
-    //             const url = pokemon.getAttribute('data-image');
-    //             const hp = pokemon.getAttribute('data-hp');
+            }
+            if (showOrHide === 'hide') {
+                elementToHide.style.display = 'none';
 
-    //             console.log('click')
-    //         })
+            }
+        }
 
-    //     })
-
-    // }
-
-
-
-    //not adding listener because of async call fix this
-
+    }
 
     //user chooses a pokemon
     const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);

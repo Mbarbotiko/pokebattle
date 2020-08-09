@@ -45,3 +45,19 @@ body{
 .pokemon-card:hover{
     cursor: pointer;
 }
+
+.error{
+    display: none;
+    text-align: center;
+}
+
+.loading{
+    background-color:green;
+}
+.loading img{
+    width:20%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+   
+}
