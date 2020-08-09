@@ -1,28 +1,48 @@
-(function () {
-    getPokemon();
-    function getPokemon() {
+(() => {
+    const showOrHideElement = (showOrHide, selector) => {
+        const elementToHide = document.querySelector(selector);
+        if (elementToHide) {
+            if (showOrHide === 'show') {
+                elementToHide.style.display = 'block';
+
+            }
+            if (showOrHide === 'hide') {
+                elementToHide.style.display = 'none';
+
+            }
+        }
+
+    }
+
+
+    const tryAgainButton = document.querySelector('.try-again');
+    tryAgainButton.addEventListener('click', () => {
+        getPokemon();
+    })
+
+    const getPokemon = () => {
         showOrHideElement('show', '.loading');
         // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
         const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = fetch(allPokemonURL)
-            .then(function (response) {
+            .then((response) => {
                 const responseData = response.json();
                 return responseData;
-            }).then(function (responseData) {
+            }).then((responseData) => {
                 const pokeURL = responseData.results;
                 //  console.log('response poke url', pokeURL);
                 return pokeURL;
-            }).then(function (pokeURL) {
+            }).then((pokeURL) => {
                 return pokeURL;
-            }).then(function (pokeURL) {
+            }).then((pokeURL) => {
                 pokeURL.forEach(item => {
                     const singlePokeURL = item.url;
                     const response = fetch(singlePokeURL)
-                        .then(function (response) {
+                        .then((response) => {
                             const responseData = response.json();
                             return responseData;
                         })
-                        .then(function (responseData) {
+                        .then((responseData) => {
                             let pokeName = responseData.forms[0].name;
                             const pokeImage = responseData.sprites.front_default;
                             pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
@@ -66,64 +86,83 @@
 
                             //before appending the first card remove the spinner
                             document.querySelector('.pokemon-cards').appendChild(colmb4);
-                            colmb4.addEventListener('click', function (e) {
+                            colmb4.addEventListener('click', (e) => {
                                 const pokemon = e.target.closest('.pokemon-card');
                                 const name = pokemon.getAttribute('data-name');
                                 const url = pokemon.getAttribute('data-image');
                                 const hp = pokemon.getAttribute('data-hp');
                                 const type = pokemon.getAttribute('data-type');
-                                console.log(name, url, hp, type)
+                                console.log(name, hp, type);
                             })
 
-                        }).then(function () {
+                        }).then(() => {
                             showOrHideElement('hide', '.error');
                         })
 
                 });
             })
-            .catch(function () {
+            .catch(() => {
                 console.log('uhoh');
                 showOrHideElement('show', '.error');
 
-            }).finally(function () {
+            }).finally(() => {
                 showOrHideElement('hide', '.loading');
             })
     }
 
-    const tryAgainButton = document.querySelector('.try-again');
-    tryAgainButton.addEventListener('click', function () {
-        getPokemon();
-    })
+    getPokemon();
 
-    function showOrHideElement(showOrHide, selector) {
-        const elementToHide = document.querySelector(selector);
-        if (elementToHide) {
-            if (showOrHide === 'show') {
-                elementToHide.style.display = 'block';
+    //user chooses a pokemon
 
-            }
-            if (showOrHide === 'hide') {
-                elementToHide.style.display = 'none';
+    //create function to call when button for startbattle text changes when app state changes
 
-            }
+    const dataStateButton = {
+        loading: {
+            dataAttribute: 'loading',
+            text: 'Loading Pokemon'
+        },
+        playerSelect: {
+            dataAttribute: 'player-select',
+            text: 'Choose your Pokemon'
+        },
+        computerSelect: {
+            dataAttribute: 'computer-select',
+            text: 'Opponent is choosing their Pokemon'
+        }
+    }
+    const startBattleButtonState = (dataState) => {
+        const button = document.querySelector('.start-game');
+        button.setAttribute('data-appState', dataState.dataAttribute);
+        switch (dataState.dataAttribute) {
+            case 'loading': button.innerText = dataState.text;
+                break;
+            case 'player-select': button.innerText = dataState.text;
+                break;
+            case 'computer-select': button.innerText = dataState.text;
+                break;
+            default: console.log('app state issue')
         }
 
     }
 
-    //user chooses a pokemon
-    const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);
+    setTimeout(function () {
+        startBattleButtonState(dataStateButton.playerSelect);
 
-    function choosePokemon(a, b, c, d) {
+    }, 5000)
+
+    const choosePokemon = (a, b, c, d) => {
         let player1 = [];
         player1.push(a, b, c, d);
         console.log(player1);
         return player1;
     };
 
-    function startGame(g) {
+    const startGame = (g) => {
         console.log(g)
         console.log('test')
     }
+
+    const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);
 
 
 
