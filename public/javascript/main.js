@@ -1,4 +1,73 @@
 (() => {
+
+    class Pokemon {
+        //https://pokeapi.co/ doesnt have weaknesses though
+        constructor(name, type, hp, strength) {
+            this.name = name,
+                this.type = type,
+                this.hp = hp,
+                this.strength = strength
+
+
+        }
+        attack(otherPokemon) {
+            let attackStrength = 10;
+            if (otherPokemon.weakness.includes(this.type)) {
+                attackStrength = attackStrength * 3;
+            }
+            return otherPokemon.hp = otherPokemon.hp - attackStrength;
+        }
+
+        getWeakness(type) {
+            const weaknessByType = {
+                Electric: ['Ground', 'Grass'],
+                Water: ['Electric', 'Grass'],
+                Fire: ['Water'],
+                Grass: ['Fire'],
+                Ground: ['Water', 'Grass'],
+                Psychic: ['Psychic'],
+                Fighting: ['Psychic'],
+                Flying: ['Electric']
+            }
+            return this.weakness = weaknessByType[type];
+        }
+    }
+
+
+
+    //     const pikachu = new Pokemon('Pikachu', 'Electric', 100, 'Water');
+    //     const squirtle = new Pokemon('Squirtle', 'Water', 100, 'Fire');
+    //     const bulbasaur = new Pokemon('Bulbasaur', 'Grass', 100, 'Ground');
+    //     const charmander = new Pokemon('Charmander', 'Fire', 100, 'Grass');
+
+
+    //     function pokeFight(pokemonOne, pokemonTwo) {
+    //         pokemonOne.getWeakness(pokemonOne.type);
+    //         pokemonTwo.getWeakness(pokemonTwo.type);
+    //         do {
+    //             pokemonOne.attack(pokemonTwo);
+    //             pokemonTwo.attack(pokemonOne);
+    //             console.log(`${pokemonOne.name} HP: ${pokemonOne.hp}, ${pokemonTwo.name} HP: ${pokemonTwo.hp}`);
+    //         } while (pokemonOne.hp > 0 && pokemonTwo.hp > 0);
+    //         //run this while hp of either pokemon is greater than 0
+    //         let winner = '';
+    //         //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
+    //         pokemonOne.hp > 0 ? winner = pokemonOne.name : winner = pokemonTwo.name;
+
+    //         return `The winner is : ${winner}`
+
+    //     }
+
+    //     console.log(pokeFight(bulbasaur, pikachu))
+
+    //     console.log(Pokemon.prototype, Object.getPrototypeOf(Pokemon), pikachu.hasOwnProperty('weakness'))
+
+
+    //     console.log('type' in pikachu)
+
+    // }
+
+
     const showOrHideElement = (showOrHide, selector) => {
         const elementToHide = document.querySelector(selector);
         if (elementToHide) {
@@ -20,7 +89,7 @@
         const element = event.target;
 
         const appState = element.getAttribute('data-appState');
-        console.log('button state', appState)
+        //console.log('button state', appState)
         switch (appState) {
             case 'error': getPokemon();
                 break;
@@ -28,7 +97,7 @@
                 break;
             case 'computer-select'://run computer choose pokemon function
                 break;
-            case 'ready'://run battle function
+            case 'ready': startGame(choosePokemon);//need player and computer arrays returned here
                 break;
         }
 
@@ -60,22 +129,67 @@
     }
     //pass what state the button should be in 
     const startBattleButtonState = (dataState) => {
-        console.log(dataState)
+        // console.log(dataState)
         const button = document.querySelector('.start-game');
         button.setAttribute('data-appState', dataState.dataAttribute);
         button.innerText = dataState.text
     }
 
-    const choosePokemon = (name,url, hp, type) => {
+    const appendPokemon = (location, name, url) => {
+        const appendTo = document.getElementById(location);
+        const pokeImage = document.createElement('img');
+        pokeImage.src = url;
+        const pokeName = document.createElement('p');
+        const pokeText = document.createTextNode(name);
+        pokeName.appendChild(pokeText);
+        appendTo.prepend(pokeImage);
+        const h4 = appendTo.querySelector('h4');
+        appendTo.insertBefore(pokeName, h4)
+
+    }
+
+    const choosePokemon = (name, url, hp, type) => {
         //function for event listener on click of cards
-        let player1 = [];
-        player1.push(name, url,hp,type);
-        console.log(player1);
+        // let player1 = [];
+        // player1.push(name, url, hp, type);
+        // console.log('player1', player1);
+        appendPokemon('player-pokemon', name, url);
         //change button state to let user know the computer is choosing now
         startBattleButtonState(dataStateButton.computerSelect);
+        computerChoosePokemon();
         //return the users choice
+
+        const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
+        console.log(player1);
         return player1;
     };
+
+    const computerChoosePokemon = () => {
+        setTimeout(() => {
+            // const whichPokemon = Math.floor(Math.random() * 151);
+            const whichPokemon = Math.floor(Math.random() * 3);
+            //choose a random pokemon
+            const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
+            const location = 'opponent-pokemon';
+            const name = computersPokemon.getAttribute('data-name');
+            const url = computersPokemon.getAttribute('data-image');
+            const hp = computersPokemon.getAttribute('data-hp');
+            const type = computersPokemon.getAttribute('data-type');
+            // let computer = [];
+            // computer.push(name, url, hp, type);
+            appendPokemon(location, name, url);
+            startBattleButtonState(dataStateButton.ready);
+            const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
+            console.log(computer)
+            return computer;
+
+        }, 3500);//delay the choice so it looks like user is deliberating
+
+    }
+
+    const startGame = (playerPokemon, computerPokemon) => {
+        console.log(playerPokemon);
+    }
 
 
 
@@ -155,7 +269,7 @@
                                 const url = pokemon.getAttribute('data-image');
                                 const hp = pokemon.getAttribute('data-hp');
                                 const type = pokemon.getAttribute('data-type');
-                               // console.log(name, hp, type);
+                                // console.log(name, hp, type);
                                 choosePokemon(name, url, hp, type);
                             })
 
@@ -176,85 +290,10 @@
 
     getPokemon();
 
-    //user chooses a pokemon
-
-
-    const startGame = (g) => {
-        console.log(g)
-        console.log('test')
-    }
-
-    // const startGameButton = document.querySelector('.start-game'); startGameButton.addEventListener('click', startGame);
 
 
 
 
-    // function pokemon() {
-    //     class Pokemon {
-    //         //https://pokeapi.co/ doesnt have weaknesses though
-    //         constructor(name, type, hp, strength) {
-    //             this.name = name,
-    //                 this.type = type,
-    //                 this.hp = hp,
-    //                 this.strength = strength
 
-
-    //         }
-    //         attack(otherPokemon) {
-    //             let attackStrength = 10;
-    //             if (otherPokemon.weakness.includes(this.type)) {
-    //                 attackStrength = attackStrength * 3;
-    //             }
-    //             return otherPokemon.hp = otherPokemon.hp - attackStrength;
-    //         }
-
-    //         getWeakness(type) {
-    //             const weaknessByType = {
-    //                 Electric: ['Ground', 'Grass'],
-    //                 Water: ['Electric', 'Grass'],
-    //                 Fire: ['Water'],
-    //                 Grass: ['Fire'],
-    //                 Ground: ['Water', 'Grass'],
-    //                 Psychic: ['Psychic'],
-    //                 Fighting: ['Psychic'],
-    //                 Flying: ['Electric']
-    //             }
-    //             return this.weakness = weaknessByType[type];
-    //         }
-    //     }
-
-
-
-    //     const pikachu = new Pokemon('Pikachu', 'Electric', 100, 'Water');
-    //     const squirtle = new Pokemon('Squirtle', 'Water', 100, 'Fire');
-    //     const bulbasaur = new Pokemon('Bulbasaur', 'Grass', 100, 'Ground');
-    //     const charmander = new Pokemon('Charmander', 'Fire', 100, 'Grass');
-
-
-    //     function pokeFight(pokemonOne, pokemonTwo) {
-    //         pokemonOne.getWeakness(pokemonOne.type);
-    //         pokemonTwo.getWeakness(pokemonTwo.type);
-    //         do {
-    //             pokemonOne.attack(pokemonTwo);
-    //             pokemonTwo.attack(pokemonOne);
-    //             console.log(`${pokemonOne.name} HP: ${pokemonOne.hp}, ${pokemonTwo.name} HP: ${pokemonTwo.hp}`);
-    //         } while (pokemonOne.hp > 0 && pokemonTwo.hp > 0);
-    //         //run this while hp of either pokemon is greater than 0
-    //         let winner = '';
-    //         //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
-    //         pokemonOne.hp > 0 ? winner = pokemonOne.name : winner = pokemonTwo.name;
-
-    //         return `The winner is : ${winner}`
-
-    //     }
-
-    //     console.log(pokeFight(bulbasaur, pikachu))
-
-    //     console.log(Pokemon.prototype, Object.getPrototypeOf(Pokemon), pikachu.hasOwnProperty('weakness'))
-
-
-    //     console.log('type' in pikachu)
-
-    // }
 
 })();

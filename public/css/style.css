@@ -6,27 +6,27 @@ body{
     background-image: url('../images/battleField.png');
     background-repeat: no-repeat;
     background-position:center ;
-    height:100vh;
+    height:70vh;
 }
 
 /* this button is showing in wrong spot and too big */
-.jumbotron .btn{
+.game-start-container .btn{
     margin: auto;
     display: block;
-    width:50%;
+    width:75%;
     background-color: rgba(112, 113, 121, 0.75);
     color:white;
     border-color: white;
 
 }
 
-.jumbotron .btn:hover{
+.game-start-container .btn:hover{
 
     background-color: rgba(14, 19, 53);
 
 }
 
-.jumbotron .btn:active{
+.game-start-container .btn:active{
 
     background-color: rgb(173, 16, 16) !important;
     border-color: white !important;
@@ -69,6 +69,16 @@ body{
     position: relative;
     top:35%;
 }
+
+/* .game-start-container{
+    position: relative;
+    top:55%;
+
+}
+.game-start-container>div{
+  height:100px!important;
+
+} */
 #player-pokemon{
     /* background-color:red; */
 
