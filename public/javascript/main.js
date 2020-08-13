@@ -1,5 +1,8 @@
 (() => {
-    let playersChoices = [];
+
+    
+    let playersPokemonChoice = [];
+    let computersPokemonChoice = [];
 
     class Pokemon {
         constructor(name, type, hp) {
@@ -120,43 +123,45 @@
 
     }
 
-    const savePlayersChoices = (playersPokemon, computersPokemon) => {
-        playersChoices.push(playersPokemon);
-        playersChoices.push(computersPokemon);
-        //send the choices to the choices array
-    }
+
 
 
     const choosePokemon = (name, url, hp, type) => {
-        //need to remove ability of selecting multiple pokemon 
-        appendPokemon('player-pokemon', name, url);
-        //change button state to let user know the computer is choosing now
-        startBattleButtonState(dataStateButton.computerSelect);
-        // const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
-        const player1 = [];
-        player1.push(name, url, hp, type)
-        const computerChoosePokemon = () => {
-            setTimeout(() => {
-                // const whichPokemon = Math.floor(Math.random() * 151);
-                const whichPokemon = Math.floor(Math.random() * 3);
-                //choose a random pokemon
-                const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
-                const location = 'opponent-pokemon';
-                const name = computersPokemon.getAttribute('data-name');
-                const url = computersPokemon.getAttribute('data-image');
-                const hp = computersPokemon.getAttribute('data-hp');
-                const type = computersPokemon.getAttribute('data-type');
-                const computer = [];
-                computer.push(name, url, hp, type);
-                // const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
-                appendPokemon(location, name, url);
-                startBattleButtonState(dataStateButton.ready);
-                //console.log(player1);
-                savePlayersChoices(player1, computer);
-            }, 3500);//delay the choice so it looks like user is deliberating
+        if (playersPokemonChoice.length === 0) {
+            //need to remove ability of selecting multiple pokemon 
+            appendPokemon('player-pokemon', name, url);
+            //change button state to let user know the computer is choosing now
+            startBattleButtonState(dataStateButton.computerSelect);
+            // const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
 
+            playersPokemonChoice.push(name, url, hp, type);
+
+
+            const computerChoosePokemon = () => {
+                setTimeout(() => {
+                    // const whichPokemon = Math.floor(Math.random() * 151);
+                    const whichPokemon = Math.floor(Math.random() * 151);
+                    //choose a random pokemon
+                    console.log(whichPokemon)
+                    const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
+                    const location = 'opponent-pokemon';
+                    const name = computersPokemon.getAttribute('data-name');
+                    const url = computersPokemon.getAttribute('data-image');
+                    const hp = computersPokemon.getAttribute('data-hp');
+                    const type = computersPokemon.getAttribute('data-type');
+
+                    computersPokemonChoice.push(name, url, hp, type);
+                    // const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
+                    appendPokemon(location, name, url);
+                    startBattleButtonState(dataStateButton.ready);
+                    //console.log(player1);
+
+
+                }, 3500);//delay the choice so it looks like user is deliberating
+
+            }
+            computerChoosePokemon();
         }
-        computerChoosePokemon();
 
     };
 
@@ -167,20 +172,28 @@
         pokemonTwo.getWeakness(pokemonTwo.type);
         console.log('testing the objects', pokemonOne.type, pokemonTwo.type)
         do {
-            pokemonOne.attack(pokemonTwo);
-            pokemonTwo.attack(pokemonOne);
+            if (pokemonOne.hp > 0) {
+                pokemonOne.attack(pokemonTwo);
+
+            }
+
+            if (pokemonTwo.hp > 0) {
+                pokemonTwo.attack(pokemonOne);
+            }
+
+
             console.log(`${pokemonOne.name} HP: ${pokemonOne.hp}, ${pokemonTwo.name} HP: ${pokemonTwo.hp}`);
         } while (pokemonOne.hp > 0 && pokemonTwo.hp > 0);
         //run this while hp of either pokemon is greater than 0
         let winner = '';
         //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
-        pokemonOne.hp > 0 ? winner = pokemonOne.name : winner = pokemonTwo.name;
+        pokemonOne.hp > 0 ? winner = 'Your ' + pokemonOne.name : winner = 'Opponents ' + pokemonTwo.name;
 
         //change button here to reset the game
 
         startBattleButtonState(dataStateButton.reset);
 
-        return alert( `The winner is : ${winner}`);
+        return alert(`The winner is : ${winner}`);
         //need logic that if during any mid turn a mon hits 0 or less the game is over, currently there are scenarios were both reach 0, or one is -5 and the other 0 etc.
 
     }
@@ -188,18 +201,18 @@
 
     const startGame = () => {
 
-        const playerName = playersChoices[0][0];
-        const playerType = playersChoices[0][3];
-        let playerHP = playersChoices[0][2];
+        const playerName = playersPokemonChoice[0];
+        const playerType = playersPokemonChoice[3];
+        let playerHP = playersPokemonChoice[2];
         if (typeof (playerHP) !== 'number') {
             playerHP = parseInt(playerHP);
         }
         const player = new Pokemon(playerName, playerType, playerHP);
 
 
-        const opponentName = playersChoices[1][0];
-        const opponentType = playersChoices[1][3];
-        let opponentHP = playersChoices[1][2];
+        const opponentName = computersPokemonChoice[0];
+        const opponentType = computersPokemonChoice[3];
+        let opponentHP = computersPokemonChoice[2];
         if (typeof (opponentHP) !== 'number') {
             opponentHP = parseInt(opponentHP);
         }
@@ -211,7 +224,8 @@
 
     const resetGame = () => {
         //reset the array
-        playersChoices = [];
+        playersPokemonChoice = [];
+        computersPokemonChoice = [];
 
         //remove pokemon from DOM
         const parents = document.querySelectorAll('.chosen-pokemon');
@@ -235,7 +249,7 @@
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
         showOrHideElement('hide', '.error');
-        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=150&offset=0';
+        const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=151&offset=0';
         // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = fetch(allPokemonURL)
             .then((response) => {
