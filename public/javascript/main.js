@@ -4,6 +4,16 @@
     let playersPokemonChoice = [];
     let computersPokemonChoice = [];
 
+   
+
+    // document.getElementById('background-music').addEventListener('click',
+    //     function () {
+    //         const backgroundMusic = new Audio();
+    //         backgroundMusic.src = 'public/sounds/opening.mp3';
+    //         backgroundMusic.play();
+    //     })
+
+
     class Pokemon {
         constructor(name, type, hp) {
             this.name = name,
@@ -177,12 +187,13 @@
         pokemonTwo.getWeakness(pokemonTwo.type);
         // console.log('testing the objects', pokemonOne.type, pokemonTwo.type)
         // do {
-
-
-
+        // backgroundMusic.pause();
+        const battleMusic = new Audio();
+        battleMusic.src = 'public/sounds/battle.mp3';
+        battleMusic.play();
 
         let startFight = setInterval(function () {
-           
+
             if (pokemonOne.hp > 0) {
                 hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                 pokemonOne.attack(pokemonTwo);
@@ -227,6 +238,8 @@
 
 
                 clearInterval(startFight);
+                battleMusic.pause();
+                // backgroundMusic.play();
                 let winner = '';
                 //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
                 pokemonOne.hp > 0 ? winner = 'Your ' + pokemonOne.name : winner = 'Opponents ' + pokemonTwo.name;
@@ -290,7 +303,7 @@
         parents[1].removeChild(removeImage2);
         parents[1].removeChild(removeParagraph2);
         hpMeter.innerText = '';
-        
+
         //reset the button
         startBattleButtonState(dataStateButton.playerSelect);
 
