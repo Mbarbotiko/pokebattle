@@ -80,10 +80,26 @@ body{
 
 } */
 #player-pokemon{
+    
+    position: relative;
+    top:0%;
     /* background-color:red; */
 
 }
 #opponent-pokemon{
     /* background-color:blue; */
+    position: relative;
+    top:0%;
+}
+
+.up{
+    position: relative;
+    top:-20px;
+
+}
+
+.pokemon-hp{
+    text-align: center;
+    min-height: 30px;
 
 }
