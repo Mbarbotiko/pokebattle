@@ -1,10 +1,23 @@
 (() => {
+    /*
+    add play music option
+    Change the alert to show up in the DOM instead
+    style the app
+    create a smooth jump transition
+    create a heart meter
+    load pokemon in order
+    Media screens
+    clean up code
+    start the battle runs multiple times when clicked
+
+
+    */
 
 
     let playersPokemonChoice = [];
     let computersPokemonChoice = [];
 
-   
+
 
     // document.getElementById('background-music').addEventListener('click',
     //     function () {
@@ -152,7 +165,6 @@
                     // const whichPokemon = Math.floor(Math.random() * 151);
                     const whichPokemon = Math.floor(Math.random() * 151);
                     //choose a random pokemon
-                    // console.log(whichPokemon)
                     const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
                     const location = 'opponent-pokemon';
                     const name = computersPokemon.getAttribute('data-name');
@@ -164,7 +176,6 @@
                     // const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
                     appendPokemon(location, name, url);
                     startBattleButtonState(dataStateButton.ready);
-                    //console.log(player1);
 
 
                 }, 3500);//delay the choice so it looks like user is deliberating
@@ -180,12 +191,15 @@
         const playerPokemon = document.querySelector('#player-pokemon img');
         const opponentPokemon = document.querySelector('#opponent-pokemon img');
         const hpMeter = document.querySelector('.pokemon-hp h4');
+        const modal = document.querySelector('#fight-result');
+        const closeModal = document.querySelector('[data-dismiss="modal"]');
+        closeModal.addEventListener('click', function () {
+            modal.style.display = 'none';
+        });
 
-        // console.log(pokemonOne, pokemonTwo)
         //add animation here with delays
         pokemonOne.getWeakness(pokemonOne.type);
         pokemonTwo.getWeakness(pokemonTwo.type);
-        // console.log('testing the objects', pokemonOne.type, pokemonTwo.type)
         // do {
         // backgroundMusic.pause();
         const battleMusic = new Audio();
@@ -193,72 +207,53 @@
         battleMusic.play();
 
         let startFight = setInterval(function () {
-
-            if (pokemonOne.hp > 0) {
-                hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
-                pokemonOne.attack(pokemonTwo);
-                hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
-                playerPokemon.classList.add('up');
-
-                console.log('attack 1')
-                setTimeout(function () {
-                    playerPokemon.classList.remove('up');
-                }, 500);
-
-            }
-
-
-
-            if (pokemonTwo.hp > 0) {
-
-                setTimeout(function () {
+            //check to see if the fight should end
+            if (pokemonOne.hp > 0 && pokemonTwo.hp > 0) {
+                if (pokemonOne.hp > 0) {
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
-                    pokemonTwo.attack(pokemonOne);
+                    playerPokemon.classList.add('up');
+                    setTimeout(function () {
+                        playerPokemon.classList.remove('up');
+                        pokemonOne.attack(pokemonTwo);
+                        hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
+                    }, 500);
+                }
+                if (pokemonTwo.hp > 0) {
+                    //after getting hit check for hp before running a return attack
+                    setTimeout(function () {
+                        hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
+                        opponentPokemon.classList.add('up');
+                    }, 1500);
+                    setTimeout(function () {
+                        opponentPokemon.classList.remove('up');
+                        pokemonTwo.attack(pokemonOne);
+                        hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
+                    }, 2000);
+                }
+
+            } else {
+
+                if (pokemonOne.hp <= 0 || pokemonTwo.hp <= 0) {
+                    clearInterval(startFight);
+                    battleMusic.pause();
+                    // backgroundMusic.play();
+                    let winner = '';
+                    //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
+                    pokemonOne.hp > 0 ? winner = 'Your ' + pokemonOne.name : winner = 'Opponents ' + pokemonTwo.name;
+                    //change button here to reset the game
+                    startBattleButtonState(dataStateButton.reset);
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
-                    opponentPokemon.classList.add('up');
-                    console.log('attack 2')
-                }, 1500);
-                setTimeout(function () {
-                    opponentPokemon.classList.remove('up');
-                }, 2000);
 
+                    modal.style.display = 'block';
+                    let modalMessage = modal.querySelector('.modal-body p');
+                    modalMessage.innerText = `The winner is : ${winner}`
+                    return;
+                    //return alert(`The winner is : ${winner}`);
 
-
+                }
             }
-
-            // console.log(`${pokemonOne.name} HP: ${pokemonOne.hp}, ${pokemonTwo.name} HP: ${pokemonTwo.hp}`);
-
-            //run this while hp of either pokemon is greater than 0
-
-            //need logic that if during any mid turn a mon hits 0 or less the game is over, currently there are scenarios were both reach 0, or one is -5 and the other 0 etc.
-
-
-            //want to wait 5 seconds in between functions 
-            if (pokemonOne.hp <= 0 || pokemonTwo.hp <= 0) {
-
-
-                clearInterval(startFight);
-                battleMusic.pause();
-                // backgroundMusic.play();
-                let winner = '';
-                //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
-                pokemonOne.hp > 0 ? winner = 'Your ' + pokemonOne.name : winner = 'Opponents ' + pokemonTwo.name;
-
-                //change button here to reset the game
-
-                startBattleButtonState(dataStateButton.reset);
-                hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
-
-
-                return alert(`The winner is : ${winner}`);
-            }
-
-
 
         }, 3000);
-
-        // } while (pokemonOne.hp > 0 && pokemonTwo.hp > 0);
-
 
     }
 
