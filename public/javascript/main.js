@@ -1,7 +1,6 @@
 (() => {
     /*
     add play music option
-    Change the alert to show up in the DOM instead
     style the app
     create a smooth jump transition
     create a heart meter
@@ -9,7 +8,7 @@
     Media screens
     clean up code
     start the battle runs multiple times when clicked
-
+    write tests
 
     */
 
@@ -209,12 +208,13 @@
         let startFight = setInterval(function () {
             //check to see if the fight should end
             if (pokemonOne.hp > 0 && pokemonTwo.hp > 0) {
+
                 if (pokemonOne.hp > 0) {
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
+                    pokemonOne.attack(pokemonTwo);
                     playerPokemon.classList.add('up');
                     setTimeout(function () {
                         playerPokemon.classList.remove('up');
-                        pokemonOne.attack(pokemonTwo);
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     }, 500);
                 }
@@ -222,11 +222,11 @@
                     //after getting hit check for hp before running a return attack
                     setTimeout(function () {
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
+                        pokemonTwo.attack(pokemonOne);
                         opponentPokemon.classList.add('up');
                     }, 1500);
                     setTimeout(function () {
                         opponentPokemon.classList.remove('up');
-                        pokemonTwo.attack(pokemonOne);
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     }, 2000);
                 }
