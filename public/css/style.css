@@ -1,12 +1,18 @@
 body{
     background-color: rgb(14, 19, 53);
     color:white;
+    font-family:Trebuchet MS, sans-serif;
+    font-size: 16pt;
+    letter-spacing: .1em;
+
 }
+    
 .jumbotron{
     background-image: url('../images/battleField.png');
     background-repeat: no-repeat;
     background-position:center ;
     height:70vh;
+    
 }
 
 /* this button is showing in wrong spot and too big */
@@ -20,24 +26,24 @@ body{
 
 }
 
-.game-start-container .btn:hover{
+.game-start-container{
+    font-size: 8pt;
+}
+.chosen-pokemon p{
+    font-size: 10pt;
+}
 
+.game-start-container .btn:hover{
     background-color: rgba(14, 19, 53);
 
 }
 
 .game-start-container .btn:active{
-
     background-color: rgb(173, 16, 16) !important;
     border-color: white !important;
-
-
+ 
 }
-/* a.btn.btn-primary.btn-lg[role="button"]:focus{
-    border: none !important;
-    outline: none !important;
 
-} */
 .pokemon-card{
     background-color: rgb(14, 19, 53);
     text-align: center;
@@ -53,7 +59,7 @@ body{
 }
 
 .loading{
-    background-color:green;
+
 }
 .loading img{
     width:20%;
@@ -63,11 +69,18 @@ body{
    
 }
 .chosen-pokemon{
+    /* background-color:black; */
     width:50%;
     float: left;
-    padding-left:20%;
+    /* margin-left:10%; */
     position: relative;
-    top:35%;
+    top:0%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    min-height: 35vh;
+    text-align: center;
  
 }
 
@@ -88,6 +101,7 @@ text-align: center;
     
     position: relative;
     top:0%;
+    left:5%
     /* background-color:red; */
 
 }
@@ -95,6 +109,7 @@ text-align: center;
     /* background-color:blue; */
     position: relative;
     top:0%;
+    right:5%
 }
 
 @keyframes up {

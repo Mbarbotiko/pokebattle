@@ -134,11 +134,14 @@
         const pokeImage = document.createElement('img');
         pokeImage.src = url;
         const pokeName = document.createElement('p');
-        const pokeText = document.createTextNode(name);
-        pokeName.appendChild(pokeText);
-        appendTo.prepend(pokeImage);
-        const h4 = appendTo.querySelector('h4');
-        appendTo.insertBefore(pokeName, h4)
+        pokeName.textContent = name;
+        appendTo.append(pokeImage);
+        appendTo.append(pokeName)
+
+        // appendTo.prepend(pokeImage);
+        // // appendTo.append(pokeName);
+        // const h4 = appendTo.querySelector('h4');
+        // appendTo.insertBefore(pokeName, h4)
 
     }
 
@@ -301,10 +304,10 @@
         const removeImage2 = parents[1].querySelector('img');
         const removeParagraph2 = parents[1].querySelector('p');
         const hpMeter = document.querySelector('.pokemon-hp h4');
-        parents[0].removeChild(removeImage1);
-        parents[0].removeChild(removeParagraph1);
-        parents[1].removeChild(removeImage2);
-        parents[1].removeChild(removeParagraph2);
+        parents[0].firstElementChild.removeChild(removeImage1);
+        parents[0].firstElementChild.removeChild(removeParagraph1);
+        parents[1].firstElementChild.removeChild(removeImage2);
+        parents[1].firstElementChild.removeChild(removeParagraph2);
         hpMeter.innerText = '';
 
         //reset the button
