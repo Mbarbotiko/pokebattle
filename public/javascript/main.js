@@ -6,10 +6,8 @@
     /*
 
     style the app
-    create a heart meter
-    load pokemon in order
-    https://daveceddia.com/waiting-for-promises-in-a-loop/
-    Media screens
+    - finish media screens
+    - up down classes top - 20px etc force container to dip down at smaller screen size
     clean up code
     */
 
@@ -67,11 +65,9 @@
 
     }
 
-
     const appStateButton = document.querySelector('.start-game');
     appStateButton.addEventListener('click', (e) => {
         const element = event.target;
-
         const appState = element.getAttribute('data-appState');
         switch (appState) {
             case 'error': getPokemon();
@@ -91,7 +87,6 @@
     });
 
     //create function to call when button for startbattle text changes when app state changes
-
     const dataStateButton = {
         loading: {
             dataAttribute: 'loading',
@@ -128,7 +123,6 @@
         button.setAttribute('data-appState', dataState.dataAttribute);
         button.innerText = dataState.text
     }
-
     const appendPokemon = (location, name, url) => {
         const appendTo = document.getElementById(location);
         const pokeImage = document.createElement('img');
@@ -144,10 +138,6 @@
         // appendTo.insertBefore(pokeName, h4)
 
     }
-
-
-
-
     const choosePokemon = (name, url, hp, type) => {
         if (playersPokemonChoice.length === 0) {
             //need to remove ability of selecting multiple pokemon 
@@ -155,10 +145,7 @@
             //change button state to let user know the computer is choosing now
             startBattleButtonState(dataStateButton.computerSelect);
             // const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
-
             playersPokemonChoice.push(name, url, hp, type);
-
-
             const computerChoosePokemon = () => {
                 setTimeout(() => {
                     // const whichPokemon = Math.floor(Math.random() * 151);
@@ -195,7 +182,6 @@
         closeModal.addEventListener('click', function () {
             modal.style.display = 'none';
         });
-
         //add animation here with delays
         pokemonOne.getWeakness(pokemonOne.type);
         pokemonTwo.getWeakness(pokemonTwo.type);
@@ -204,11 +190,9 @@
         const battleMusic = new Audio();
         battleMusic.src = 'public/sounds/battle.mp3';
         battleMusic.play();
-
         let startFight = setInterval(function () {
             //check to see if the fight should end
             if (pokemonOne.hp > 0 && pokemonTwo.hp > 0) {
-
                 if (pokemonOne.hp > 0) {
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     pokemonOne.attack(pokemonTwo);
@@ -237,9 +221,7 @@
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     }, 2000);
                 }
-
             } else {
-
                 if (pokemonOne.hp <= 0 || pokemonTwo.hp <= 0) {
                     clearInterval(startFight);
                     battleMusic.pause();
@@ -264,7 +246,6 @@
 
     }
 
-
     const startGame = () => {
         if (!gameStart) {
             gameStart = true;
@@ -275,8 +256,6 @@
                 playerHP = parseInt(playerHP);
             }
             const player = new Pokemon(playerName, playerType, playerHP);
-
-
             const opponentName = computersPokemonChoice[0];
             const opponentType = computersPokemonChoice[3];
             let opponentHP = computersPokemonChoice[2];
@@ -284,8 +263,6 @@
                 opponentHP = parseInt(opponentHP);
             }
             const opponent = new Pokemon(opponentName, opponentType, opponentHP);
-
-
             pokeFight(player, opponent);
             startBattleButtonState(dataStateButton.inprogress);
         }
@@ -296,7 +273,6 @@
         playersPokemonChoice = [];
         computersPokemonChoice = [];
         gameStart = false;
-
         //remove pokemon from DOM
         const parents = document.querySelectorAll('.chosen-pokemon');
         const removeImage1 = parents[0].querySelector('img');
@@ -309,15 +285,9 @@
         parents[1].firstElementChild.removeChild(removeImage2);
         parents[1].firstElementChild.removeChild(removeParagraph2);
         hpMeter.innerText = '';
-
         //reset the button
         startBattleButtonState(dataStateButton.playerSelect);
-
-
     }
-
-
-
 
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
@@ -338,78 +308,68 @@
                 startBattleButtonState(dataStateButton.playerSelect);
 
                 pokeURL.forEach(item => {
-                    return new Promise((resolve, reject) => {
-                        const singlePokeURL = item.url;
+                    const singlePokeURL = item.url;
+                    const response = fetch(singlePokeURL)
+                        .then((response) => {
+                            const responseData = response.json();
+
+                            return responseData;
+                        })
+                        .then((responseData) => {
+                            let pokeName = responseData.forms[0].name;
+                            const pokeImage = responseData.sprites.front_default;
+                            pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
+                            const pokeHP = responseData.stats[0].base_stat;
+                            const pokeType = responseData.types[0].type.name;
+
+                            let colmb4 = document.createElement('div');
+                            colmb4.className = "col-mb-4";
+
+                            let cardh100 = document.createElement('div');
+                            cardh100.className = "card h-100 pokemon-card";
+                            cardh100.setAttribute('data-name', pokeName);
+                            cardh100.setAttribute('data-image', pokeImage);
+                            cardh100.setAttribute('data-hp', pokeHP);
+                            cardh100.setAttribute('data-type', pokeType);
 
 
-                        const response = fetch(singlePokeURL)
-                            .then((response) => {
-                                const responseData = response.json();
+                            let imgCard = document.createElement('img');
+                            imgCard.src = pokeImage;
+                            imgCard.className = "card-img-top";
 
-                                return responseData;
-                            })
-                            .then((responseData) => {
-                                let pokeName = responseData.forms[0].name;
-                                const pokeImage = responseData.sprites.front_default;
-                                pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
-                                const pokeHP = responseData.stats[0].base_stat;
-                                const pokeType = responseData.types[0].type.name;
+                            let cardBody = document.createElement('div');
 
-                                let colmb4 = document.createElement('div');
-                                colmb4.className = "col mb-4";
+                            cardBody.className = "card-body";
 
-                                let cardh100 = document.createElement('div');
-                                cardh100.className = "card h-100 pokemon-card";
-                                cardh100.setAttribute('data-name', pokeName);
-                                cardh100.setAttribute('data-image', pokeImage);
-                                cardh100.setAttribute('data-hp', pokeHP);
-                                cardh100.setAttribute('data-type', pokeType);
+                            let pText = document.createElement('p');
+                            pText.className = "card-text";
 
+                            let textNode = document.createTextNode(pokeName)
 
-                                let imgCard = document.createElement('img');
-                                imgCard.src = pokeImage;
-                                imgCard.className = "card-img-top";
+                            colmb4.appendChild(cardh100);
 
-                                let cardBody = document.createElement('div');
+                            cardh100.appendChild(imgCard);
 
-                                cardBody.className = "card-body";
+                            cardh100.appendChild(cardBody);
 
-                                let pText = document.createElement('p');
-                                pText.className = "card-text";
+                            cardBody.appendChild(pText);
 
-                                let textNode = document.createTextNode(pokeName)
-
-                                colmb4.appendChild(cardh100);
-
-                                cardh100.appendChild(imgCard);
-
-                                cardh100.appendChild(cardBody);
-
-                                cardBody.appendChild(pText);
-
-                                pText.appendChild(textNode);
+                            pText.appendChild(textNode);
 
 
 
-                                //before appending the first card remove the spinner
-                                document.querySelector('.pokemon-cards').appendChild(colmb4);
-                                colmb4.addEventListener('click', (e) => {
-                                    const pokemon = e.target.closest('.pokemon-card');
-                                    const name = pokemon.getAttribute('data-name');
-                                    const url = pokemon.getAttribute('data-image');
-                                    const hp = pokemon.getAttribute('data-hp');
-                                    const type = pokemon.getAttribute('data-type');
-                                    choosePokemon(name, url, hp, type);
-                                })
-
-                            })
-                            .then((responseData) => {
-                                resolve(responseData);
-
+                            //before appending the first card remove the spinner
+                            document.querySelector('.pokemon-cards').appendChild(colmb4);
+                            colmb4.addEventListener('click', (e) => {
+                                const pokemon = e.target.closest('.pokemon-card');
+                                const name = pokemon.getAttribute('data-name');
+                                const url = pokemon.getAttribute('data-image');
+                                const hp = pokemon.getAttribute('data-hp');
+                                const type = pokemon.getAttribute('data-type');
+                                choosePokemon(name, url, hp, type);
                             })
 
-
-                    })
+                        })
 
 
                 })
@@ -419,7 +379,7 @@
 
                 showOrHideElement('show', '.error');
                 startBattleButtonState(dataStateButton.error);
-                reject(error);
+              
 
             }).finally(() => {
                 showOrHideElement('hide', '.loading');
@@ -427,11 +387,5 @@
     }
 
     getPokemon();
-
-
-
-
-
-
 
 })();
