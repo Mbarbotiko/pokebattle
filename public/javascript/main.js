@@ -1,18 +1,15 @@
 
-
-
 (() => {
 
 
+
     /*
-  
+
     style the app
     create a heart meter
     load pokemon in order
     Media screens
     clean up code
-    write tests
-
     */
 
 
