@@ -1,0 +1,26 @@
+{
+  "name": "pokebattle",
+  "version": "1.0.0",
+  "description": "game app",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mbarbotiko/pokebattle.git"
+  },
+  "keywords": [
+    "pokemon",
+    "battle"
+  ],
+  "author": "Margarita Barbotiko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mbarbotiko/pokebattle/issues"
+  },
+  "homepage": "https://github.com/Mbarbotiko/pokebattle#readme",
+  "devDependencies": {
+    "jest": "^26.4.2"
+  }
+}
