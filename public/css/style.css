@@ -68,6 +68,11 @@ body{
     padding-left:20%;
     position: relative;
     top:35%;
+ 
+}
+
+.chosen-pokemon p{
+text-align: center;
 }
 
 /* .game-start-container{
@@ -92,11 +97,31 @@ body{
     top:0%;
 }
 
-.up{
+@keyframes up {
+    from {top: 0px;}
+    to {top: -20px;}
+ }
+ @keyframes down {
+    from {top: -20px;}
+    to {top: 0px;}
+ }
+
+/* .up{
     position: relative;
     top:-20px;
+} */
 
+.up{
+    position: relative;
+  animation: up 1s ;
 }
+
+.down{
+    position: relative;
+  animation: down 1s ;
+}
+
+
 
 .pokemon-hp{
     text-align: center;

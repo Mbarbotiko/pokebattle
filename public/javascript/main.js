@@ -1,13 +1,11 @@
 (() => {
     /*
-    add play music option
+  
     style the app
-    create a smooth jump transition
     create a heart meter
     load pokemon in order
     Media screens
     clean up code
-    start the battle runs multiple times when clicked
     write tests
 
     */
@@ -15,15 +13,8 @@
 
     let playersPokemonChoice = [];
     let computersPokemonChoice = [];
+    let gameStart = false;
 
-
-
-    // document.getElementById('background-music').addEventListener('click',
-    //     function () {
-    //         const backgroundMusic = new Audio();
-    //         backgroundMusic.src = 'public/sounds/opening.mp3';
-    //         backgroundMusic.play();
-    //     })
 
 
     class Pokemon {
@@ -34,7 +25,6 @@
 
         }
         attack(otherPokemon) {
-            // console.log('this', this)
             let attackStrength = 10;
             if (otherPokemon.weakness.includes(this.type)) {//this.type is undefined in the game call
                 attackStrength = attackStrength * 3;
@@ -80,7 +70,6 @@
         const element = event.target;
 
         const appState = element.getAttribute('data-appState');
-        //console.log('button state', appState)
         switch (appState) {
             case 'error': getPokemon();
                 break;
@@ -89,6 +78,8 @@
             case 'computer-select'://run computer choose pokemon function
                 break;
             case 'ready': startGame();
+                break;
+            case 'in-progress': //
                 break;
             case 'reset': resetGame();
                 break;
@@ -119,6 +110,10 @@
             dataAttribute: 'ready',
             text: 'Start the battle!'
         },
+        inprogress: {
+            dataAttribute: 'in-progress',
+            text: 'Battle in Progress'
+        },
         reset: {
             dataAttribute: 'reset',
             text: 'Reset'
@@ -126,7 +121,6 @@
     }
     //pass what state the button should be in 
     const startBattleButtonState = (dataState) => {
-        // console.log(dataState)
         const button = document.querySelector('.start-game');
         button.setAttribute('data-appState', dataState.dataAttribute);
         button.innerText = dataState.text
@@ -212,9 +206,13 @@
                 if (pokemonOne.hp > 0) {
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     pokemonOne.attack(pokemonTwo);
+                    // playerPokemon.classList.add('up');
+                    playerPokemon.classList.remove('down');
                     playerPokemon.classList.add('up');
                     setTimeout(function () {
+                        //  playerPokemon.classList.remove('up');
                         playerPokemon.classList.remove('up');
+                        playerPokemon.classList.add('down');
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     }, 500);
                 }
@@ -223,10 +221,13 @@
                     setTimeout(function () {
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                         pokemonTwo.attack(pokemonOne);
+                        opponentPokemon.classList.remove('down');
                         opponentPokemon.classList.add('up');
+
                     }, 1500);
                     setTimeout(function () {
                         opponentPokemon.classList.remove('up');
+                        opponentPokemon.classList.add('down');
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     }, 2000);
                 }
@@ -259,32 +260,36 @@
 
 
     const startGame = () => {
+        if (!gameStart) {
+            gameStart = true;
+            const playerName = playersPokemonChoice[0];
+            const playerType = playersPokemonChoice[3];
+            let playerHP = playersPokemonChoice[2];
+            if (typeof (playerHP) !== 'number') {
+                playerHP = parseInt(playerHP);
+            }
+            const player = new Pokemon(playerName, playerType, playerHP);
 
-        const playerName = playersPokemonChoice[0];
-        const playerType = playersPokemonChoice[3];
-        let playerHP = playersPokemonChoice[2];
-        if (typeof (playerHP) !== 'number') {
-            playerHP = parseInt(playerHP);
+
+            const opponentName = computersPokemonChoice[0];
+            const opponentType = computersPokemonChoice[3];
+            let opponentHP = computersPokemonChoice[2];
+            if (typeof (opponentHP) !== 'number') {
+                opponentHP = parseInt(opponentHP);
+            }
+            const opponent = new Pokemon(opponentName, opponentType, opponentHP);
+
+
+            pokeFight(player, opponent);
+            startBattleButtonState(dataStateButton.inprogress);
         }
-        const player = new Pokemon(playerName, playerType, playerHP);
-
-
-        const opponentName = computersPokemonChoice[0];
-        const opponentType = computersPokemonChoice[3];
-        let opponentHP = computersPokemonChoice[2];
-        if (typeof (opponentHP) !== 'number') {
-            opponentHP = parseInt(opponentHP);
-        }
-        const opponent = new Pokemon(opponentName, opponentType, opponentHP);
-
-
-        pokeFight(player, opponent);
     }
 
     const resetGame = () => {
         //reset the array
         playersPokemonChoice = [];
         computersPokemonChoice = [];
+        gameStart = false;
 
         //remove pokemon from DOM
         const parents = document.querySelectorAll('.chosen-pokemon');
@@ -319,7 +324,6 @@
                 return responseData;
             }).then((responseData) => {
                 const pokeURL = responseData.results;
-                //  console.log('response poke url', pokeURL);
                 return pokeURL;
             }).then((pokeURL) => {
                 return pokeURL;
@@ -384,7 +388,6 @@
                                 const url = pokemon.getAttribute('data-image');
                                 const hp = pokemon.getAttribute('data-hp');
                                 const type = pokemon.getAttribute('data-type');
-                                // console.log(name, hp, type);
                                 choosePokemon(name, url, hp, type);
                             })
 
