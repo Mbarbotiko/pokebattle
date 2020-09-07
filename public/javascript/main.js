@@ -8,6 +8,7 @@
     style the app
     create a heart meter
     load pokemon in order
+    https://daveceddia.com/waiting-for-promises-in-a-loop/
     Media screens
     clean up code
     */
@@ -334,74 +335,88 @@
                 startBattleButtonState(dataStateButton.playerSelect);
 
                 pokeURL.forEach(item => {
-                    const singlePokeURL = item.url;
-                    const response = fetch(singlePokeURL)
-                        .then((response) => {
-                            const responseData = response.json();
-                            return responseData;
-                        })
-                        .then((responseData) => {
-                            let pokeName = responseData.forms[0].name;
-                            const pokeImage = responseData.sprites.front_default;
-                            pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
-                            const pokeHP = responseData.stats[0].base_stat;
-                            const pokeType = responseData.types[0].type.name;
-
-                            let colmb4 = document.createElement('div');
-                            colmb4.className = "col mb-4";
-
-                            let cardh100 = document.createElement('div');
-                            cardh100.className = "card h-100 pokemon-card";
-                            cardh100.setAttribute('data-name', pokeName);
-                            cardh100.setAttribute('data-image', pokeImage);
-                            cardh100.setAttribute('data-hp', pokeHP);
-                            cardh100.setAttribute('data-type', pokeType);
+                    return new Promise((resolve, reject) => {
+                        const singlePokeURL = item.url;
 
 
-                            let imgCard = document.createElement('img');
-                            imgCard.src = pokeImage;
-                            imgCard.className = "card-img-top";
+                        const response = fetch(singlePokeURL)
+                            .then((response) => {
+                                const responseData = response.json();
 
-                            let cardBody = document.createElement('div');
+                                return responseData;
+                            })
+                            .then((responseData) => {
+                                let pokeName = responseData.forms[0].name;
+                                const pokeImage = responseData.sprites.front_default;
+                                pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
+                                const pokeHP = responseData.stats[0].base_stat;
+                                const pokeType = responseData.types[0].type.name;
 
-                            cardBody.className = "card-body";
+                                let colmb4 = document.createElement('div');
+                                colmb4.className = "col mb-4";
 
-                            let pText = document.createElement('p');
-                            pText.className = "card-text";
-
-                            let textNode = document.createTextNode(pokeName)
-
-                            colmb4.appendChild(cardh100);
-
-                            cardh100.appendChild(imgCard);
-
-                            cardh100.appendChild(cardBody);
-
-                            cardBody.appendChild(pText);
-
-                            pText.appendChild(textNode);
+                                let cardh100 = document.createElement('div');
+                                cardh100.className = "card h-100 pokemon-card";
+                                cardh100.setAttribute('data-name', pokeName);
+                                cardh100.setAttribute('data-image', pokeImage);
+                                cardh100.setAttribute('data-hp', pokeHP);
+                                cardh100.setAttribute('data-type', pokeType);
 
 
-                            //before appending the first card remove the spinner
-                            document.querySelector('.pokemon-cards').appendChild(colmb4);
-                            colmb4.addEventListener('click', (e) => {
-                                const pokemon = e.target.closest('.pokemon-card');
-                                const name = pokemon.getAttribute('data-name');
-                                const url = pokemon.getAttribute('data-image');
-                                const hp = pokemon.getAttribute('data-hp');
-                                const type = pokemon.getAttribute('data-type');
-                                choosePokemon(name, url, hp, type);
+                                let imgCard = document.createElement('img');
+                                imgCard.src = pokeImage;
+                                imgCard.className = "card-img-top";
+
+                                let cardBody = document.createElement('div');
+
+                                cardBody.className = "card-body";
+
+                                let pText = document.createElement('p');
+                                pText.className = "card-text";
+
+                                let textNode = document.createTextNode(pokeName)
+
+                                colmb4.appendChild(cardh100);
+
+                                cardh100.appendChild(imgCard);
+
+                                cardh100.appendChild(cardBody);
+
+                                cardBody.appendChild(pText);
+
+                                pText.appendChild(textNode);
+
+
+
+                                //before appending the first card remove the spinner
+                                document.querySelector('.pokemon-cards').appendChild(colmb4);
+                                colmb4.addEventListener('click', (e) => {
+                                    const pokemon = e.target.closest('.pokemon-card');
+                                    const name = pokemon.getAttribute('data-name');
+                                    const url = pokemon.getAttribute('data-image');
+                                    const hp = pokemon.getAttribute('data-hp');
+                                    const type = pokemon.getAttribute('data-type');
+                                    choosePokemon(name, url, hp, type);
+                                })
+
+                            })
+                            .then((responseData) => {
+                                resolve(responseData);
+
                             })
 
-                        })
+
+                    })
+
 
                 })
 
             })
-            .catch(() => {
+            .catch((error) => {
 
                 showOrHideElement('show', '.error');
                 startBattleButtonState(dataStateButton.error);
+                reject(error);
 
             }).finally(() => {
                 showOrHideElement('hide', '.loading');
