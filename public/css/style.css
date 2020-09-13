@@ -69,6 +69,7 @@ body{
 .error{
     display: none;
     text-align: center;
+    margin-top: 35%;
 }
 
 .loading{
@@ -198,6 +199,9 @@ text-align: center;
 }
 
 @media only screen and (max-width:1200px){
+    .error{
+        margin-top: 40%;
+    }
     .chosen-pokemon h4{
         padding-top:10%;
         font-size: .7em!important;
@@ -216,6 +220,9 @@ text-align: center;
   }
 
   @media only screen and (max-width:991px){
+    .error{
+        margin-top: 100%;
+    }
 
     #player-pokemon{
         left:-35%;
@@ -225,6 +232,10 @@ text-align: center;
         
     }
   }
+
+
+
+
 
   
   @media only screen and (max-width:991px) and (orientation:landscape){
@@ -242,8 +253,27 @@ text-align: center;
     }
   }
 
+    
+  @media only screen and (max-width:775px){
+    .error{
+        margin-top: 140%;
+    }
+  }
+
+
 
 @media only screen and (max-width:575px){
+
+    .modal p{
+        font-size: 12pt;
+    }
+    [role=button]{
+        font-size: 1rem;
+    }
+
+    .error{
+        margin-top: 200%;
+    }
     #player-pokemon h4, #player-pokemon p{
       text-align: right;
 

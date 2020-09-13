@@ -4,10 +4,6 @@
 
 
     /*
-
-    style the app
-    - finish media screens
-    - up down classes top - 20px etc force container to dip down at smaller screen size
     clean up code
     */
 
