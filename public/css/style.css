@@ -1,3 +1,5 @@
+
+
 body{
     background-color: rgb(14, 19, 53);
     color:white;
@@ -5,7 +7,11 @@ body{
     font-size: 16pt;
     letter-spacing: .1em;
     height: 100vh;
+    margin:0 auto;
     min-width: 375px;
+    max-width: 1920px;
+
+
 }
     
 .jumbotron{
@@ -13,6 +19,8 @@ body{
     background-repeat: no-repeat;
     background-position:center ;
     height:70vh;
+    min-height: 800px;
+    background-color: rgb(14, 19, 53);
     
 }
 
@@ -29,6 +37,10 @@ body{
 
 .pokemon-cards{
     font-size: 8pt;
+}
+
+.chosen-pokemon{
+    min-height: 100%;
 }
 .chosen-pokemon p{
     font-size: 10pt;
@@ -72,7 +84,7 @@ top:50px;
     float: left;
     /* margin-left:10%; */
     position: relative;
-    top:0%;
+    top:15%;
     display:flex;
     align-items: center;
     justify-content: center;
@@ -86,6 +98,8 @@ top:50px;
 text-align: center;
 }
 
+
+
 /* .game-start-container{
     position: relative;
     top:55%;
@@ -96,18 +110,31 @@ text-align: center;
 
 } */
 #player-pokemon{
-    
+    max-width: 200px;
+    min-width: 200px;
+    min-height: 200px;
+    max-height: 200px;
     position: relative;
     top:0%;
-    left:5%
-    /* background-color:red; */
+    left:5%;
+    background-color:rgba(255, 0, 0, 0.25);
+    border-radius: 100%;
 
 }
 #opponent-pokemon{
-    /* background-color:blue; */
+    max-width: 200px;
+    min-width: 200px;
+    min-height: 200px;
+    max-height: 200px;
+    background-color:rgba(0, 0, 255, 0.25);
     position: relative;
     top:0%;
-    right:5%
+    right:5%;
+    border-radius: 100%;
+}
+#opponent-pokemon h4{
+    font-size: .84em;
+    line-height: 2.25em;
 }
 
 @keyframes up {
@@ -172,38 +199,72 @@ text-align: center;
 
 @media only screen and (max-width:1200px){
     .chosen-pokemon h4{
-        font-size: .7em;
+        padding-top:10%;
+        font-size: .7em!important;
+        line-height: 1em!important;
     }
 
     #player-pokemon{
         left:-5%;
-        padding-top:15%
+ 
     }
     #opponent-pokemon{
         right:-5%;
-        padding-top:15%
+
         
     }
   }
 
   @media only screen and (max-width:991px){
-    .chosen-pokemon h4{
-        font-size: .7em;
+
+    #player-pokemon{
+        left:-35%;
+    }
+    #opponent-pokemon{
+        right:-35%;
+        
+    }
+  }
+
+  
+  @media only screen and (max-width:991px) and (orientation:landscape){
+    .chosen-pokemon{
+        top: 30%;
+      
     }
 
     #player-pokemon{
         left:-25%;
-        padding-top:20%
     }
     #opponent-pokemon{
         right:-25%;
-        padding-top:20%
         
     }
   }
 
 
 @media only screen and (max-width:575px){
+    #player-pokemon h4, #player-pokemon p{
+      text-align: right;
+
+    }
+    #opponent-pokemon h4, #opponent-pokemon p {
+      text-align:left;
+
+
+    }
+    #player-pokemon {
+        text-align: right;
+        width:100%;
+ 
+      }
+      #opponent-pokemon {
+        text-align:left;
+
+        width:100%;
+
+          
+      }
   .pokemon-card{
     min-width: 25vw;
     padding:0px;
@@ -216,3 +277,11 @@ text-align: center;
       padding:0rem;
   }
 }
+
+@media only screen and (max-width:575px) and (orientation:landscape){
+    .chosen-pokemon{
+        top: 25%;
+      
+    }
+
+  }
