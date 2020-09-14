@@ -1,5 +1,3 @@
-
-
 body{
     background-color: rgb(14, 19, 53);
     color:white;
@@ -10,21 +8,19 @@ body{
     margin:0 auto;
     min-width: 375px;
     max-width: 1920px;
-
-
 }
-    
 .jumbotron{
     background-image: url('../images/battleField.png');
     background-repeat: no-repeat;
     background-position:center ;
     height:70vh;
     min-height: 800px;
-    background-color: rgb(14, 19, 53);
-    
+    background-color: rgb(14, 19, 53); 
+}
+.pokemon-hp{
+    min-height: 75px!important;
 }
 
-/* this button is showing in wrong spot and too big */
 .game-start-container .btn{
     margin: auto;
     display: block;
@@ -32,58 +28,42 @@ body{
     background-color: rgba(112, 113, 121, 0.75);
     color:white;
     border-color: white;
-
 }
-
 .pokemon-cards{
     font-size: 8pt;
 }
-
 .chosen-pokemon{
     min-height: 100%;
 }
 .chosen-pokemon p{
     font-size: 10pt;
 }
-
 .game-start-container .btn:hover{
     background-color: rgba(14, 19, 53);
-
 }
-
 .game-start-container .btn:active{
     background-color: rgb(173, 16, 16) !important;
     border-color: white !important;
- 
 }
-
 .pokemon-card{
     background-color: rgb(14, 19, 53);
     text-align: center;
 }
-
 .pokemon-card:hover{
     cursor: pointer;
 }
-
 .error{
     display: none;
     text-align: center;
     margin-top: 35%;
 }
-
 .loading{
-position: relative;
-top:50px;
-
-
+    position: relative;
+    top:50px;
 }
-
 .chosen-pokemon{
-    /* background-color:black; */
     width:50%;
     float: left;
-    /* margin-left:10%; */
     position: relative;
     top:15%;
     display:flex;
@@ -92,24 +72,10 @@ top:50px;
     align-content: center;
     min-height: 35vh;
     text-align: center;
- 
 }
-
 .chosen-pokemon p{
-text-align: center;
+    text-align: center;
 }
-
-
-
-/* .game-start-container{
-    position: relative;
-    top:55%;
-
-}
-.game-start-container>div{
-  height:100px!important;
-
-} */
 #player-pokemon{
     max-width: 200px;
     min-width: 200px;
@@ -120,7 +86,6 @@ text-align: center;
     left:5%;
     background-color:rgba(255, 0, 0, 0.25);
     border-radius: 100%;
-
 }
 #opponent-pokemon{
     max-width: 200px;
@@ -137,7 +102,6 @@ text-align: center;
     font-size: .84em;
     line-height: 2.25em;
 }
-
 @keyframes up {
     from {top: 0px;}
     to {top: -20px;}
@@ -146,58 +110,40 @@ text-align: center;
     from {top: -20px;}
     to {top: 0px;}
  }
-
-/* .up{
-    position: relative;
-    top:-20px;
-} */
-
 .up{
     position: relative;
-  animation: up 1s ;
+    animation: up 1s ;
 }
-
 .down{
     position: relative;
-  animation: down 1s ;
+    animation: down 1s ;
 }
-
-
-
 .pokemon-hp{
     text-align: center;
     min-height: 30px;
-
 }
-
 .modal{
     color:black;
 }
-
 .modal-body{
     text-align: center;
 }
 .modal-header{
     background-color: rgb(14, 19, 53);
 }
-
 .modal-footer{
     background-color: rgb(14, 19, 53);
 }
-
 .close{
     color:white;
 }
-
 .close:hover{
     color:white;
 }
-
 .card img{
     width:100px;
     margin: auto;
 }
-
 @media only screen and (max-width:1200px){
     .error{
         margin-top: 40%;
@@ -207,97 +153,69 @@ text-align: center;
         font-size: .7em!important;
         line-height: 1em!important;
     }
-
     #player-pokemon{
         left:-5%;
- 
     }
     #opponent-pokemon{
-        right:-5%;
-
-        
+        right:-5%;    
     }
   }
-
   @media only screen and (max-width:991px){
     .error{
         margin-top: 100%;
     }
-
     #player-pokemon{
         left:-35%;
     }
     #opponent-pokemon{
-        right:-35%;
-        
+        right:-35%; 
     }
   }
 
-
-
-
-
-  
   @media only screen and (max-width:991px) and (orientation:landscape){
     .chosen-pokemon{
         top: 30%;
-      
     }
-
     #player-pokemon{
         left:-25%;
     }
     #opponent-pokemon{
-        right:-25%;
-        
+        right:-25%; 
     }
   }
 
-    
   @media only screen and (max-width:775px){
     .error{
         margin-top: 140%;
     }
   }
-
-
-
 @media only screen and (max-width:575px){
-
     .modal p{
         font-size: 12pt;
     }
     [role=button]{
         font-size: 1rem;
     }
-
     .error{
         margin-top: 200%;
     }
     #player-pokemon h4, #player-pokemon p{
       text-align: right;
-
     }
     #opponent-pokemon h4, #opponent-pokemon p {
       text-align:left;
-
-
     }
     #player-pokemon {
         text-align: right;
         width:100%;
- 
       }
-      #opponent-pokemon {
+    #opponent-pokemon {
         text-align:left;
-
-        width:100%;
-
-          
-      }
+        width:100%;   
+     }
   .pokemon-card{
-    min-width: 25vw;
-    padding:0px;
+        min-width: 25vw;
+        padding:0px;
   }  
   .pokemon-card img{
     width: 50px;
@@ -310,8 +228,6 @@ text-align: center;
 
 @media only screen and (max-width:575px) and (orientation:landscape){
     .chosen-pokemon{
-        top: 25%;
-      
+        top: 25%;   
     }
-
   }

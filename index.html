@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
-
 <link rel="icon" href="" type="image/jpg" sizes="16x16">
-
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,47 +10,34 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
         integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" media="screen" href="./public/css/style.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="./public/css/mediascreens.css">
-
 </head>
-
 <body>
-
     <div class="container">
         <div class="jumbotron">
             <div class='pokemon-hp'>
                 <h3>HP</h3>
                 <h4></h4>
             </div>
-
             <div class="chosen-pokemon">
                 <div id="player-pokemon">
                     <h4>Your Pokemon</h4>
                 </div>
-
             </div>
             <div class="chosen-pokemon">
                 <div id="opponent-pokemon">
                     <h4>Opponents Pokemon</h4>
                 </div>
-
             </div>
-
-
             <div class='error'>
                 <h2>Oops, something went wrong</h2>
             </div>
-
         </div>
         <div class="game-start-container">
             <div>
                 <!-- <button id = 'background-music'>Play Music</button> -->
                 <a class="btn btn-primary btn-lg start-game" href="#" role="button" data-appState='loading'>Loading
                     Pokemon</a>
-
             </div>
-
-
             <div class='loading'>
                 <div class="text-center">
                     <div class="spinner-border text-light" role="status">
@@ -60,22 +45,14 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
         <div class="row row-cols-md-5 row-cols-sm-2 pokemon-cards">
-
         </div>
-
-
-
     </div>
-
     <div class="modal" tabindex="-1" id='fight-result'>
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <!-- <h5 class="modal-title">Modal title</h5> -->
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -84,21 +61,10 @@
                     <p></p>
                 </div>
                 <div class="modal-footer">
-
                 </div>
             </div>
         </div>
     </div>
-
-
-    </div>
-
-
-
-
-
-
     <script src="./public/javascript/main.js"></script>
 </body>
-
 </html>

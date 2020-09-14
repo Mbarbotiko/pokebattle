@@ -1,36 +1,26 @@
 
 (() => {
-
-
-
-    /*
-    clean up code
-    */
-
-
     let playersPokemonChoice = [];
+    //store user and computer pokemon choices
     let computersPokemonChoice = [];
     let gameStart = false;
-
-
+    //store game state, false = not yet started
 
     class Pokemon {
+        //create pokemon object class
         constructor(name, type, hp) {
             this.name = name,
                 this.type = type,
                 this.hp = hp
-
         }
         attack(otherPokemon) {
             let attackStrength = 10;
-            if (otherPokemon.weakness.includes(this.type)) {//this.type is undefined in the game call
+            if (otherPokemon.weakness.includes(this.type)) {
                 attackStrength = attackStrength * 3;
             }
             return otherPokemon.hp = otherPokemon.hp - attackStrength;
         }
-
         getWeakness(type) {
-            //need to do some error handling on this, because if key is not found error is thrown
             let defaultValue = ['none'];
             const weaknessByType = {
                 electric: ['ground', 'grass'],
@@ -42,7 +32,7 @@
                 fighting: ['psychic'],
                 flying: ['electric']
             }
-            return this.weakness = weaknessByType[type] || defaultValue
+            return this.weakness = weaknessByType[type] || defaultValue;
         }
     }
 
@@ -51,30 +41,21 @@
         if (elementToHide) {
             if (showOrHide === 'show') {
                 elementToHide.style.display = 'block';
-
-            }
-            if (showOrHide === 'hide') {
+            } else {
                 elementToHide.style.display = 'none';
-
             }
         }
-
     }
 
     const appStateButton = document.querySelector('.start-game');
+    //click event for game button, get its attribute to determine what function to call next in the game
     appStateButton.addEventListener('click', (e) => {
-        const element = event.target;
+        const element = e.target;
         const appState = element.getAttribute('data-appState');
         switch (appState) {
             case 'error': getPokemon();
                 break;
-            case 'player-select': //choose pokemon function
-                break;
-            case 'computer-select'://run computer choose pokemon function
-                break;
             case 'ready': startGame();
-                break;
-            case 'in-progress': //
                 break;
             case 'reset': resetGame();
                 break;
@@ -82,7 +63,7 @@
 
     });
 
-    //create function to call when button for startbattle text changes when app state changes
+    //game button state (also game state)
     const dataStateButton = {
         loading: {
             dataAttribute: 'loading',
@@ -117,8 +98,9 @@
     const startBattleButtonState = (dataState) => {
         const button = document.querySelector('.start-game');
         button.setAttribute('data-appState', dataState.dataAttribute);
-        button.innerText = dataState.text
+        button.innerText = dataState.text;
     }
+    //when a pokemon is chosen by the user or the computer, reusable function to append the pokemon to the DOM
     const appendPokemon = (location, name, url) => {
         const appendTo = document.getElementById(location);
         const pokeImage = document.createElement('img');
@@ -127,49 +109,35 @@
         pokeName.textContent = name;
         appendTo.append(pokeImage);
         appendTo.append(pokeName)
-
-        // appendTo.prepend(pokeImage);
-        // // appendTo.append(pokeName);
-        // const h4 = appendTo.querySelector('h4');
-        // appendTo.insertBefore(pokeName, h4)
-
     }
+    //collect users choice function
     const choosePokemon = (name, url, hp, type) => {
         if (playersPokemonChoice.length === 0) {
-            //need to remove ability of selecting multiple pokemon 
             appendPokemon('player-pokemon', name, url);
-            //change button state to let user know the computer is choosing now
             startBattleButtonState(dataStateButton.computerSelect);
-            // const player1 = new Pokemon(name, type, hp, 'Water');//water is wrong 
             playersPokemonChoice.push(name, url, hp, type);
             const computerChoosePokemon = () => {
                 setTimeout(() => {
-                    // const whichPokemon = Math.floor(Math.random() * 151);
                     const whichPokemon = Math.floor(Math.random() * 151);
-                    //choose a random pokemon
                     const computersPokemon = document.querySelectorAll('.pokemon-card')[whichPokemon];
                     const location = 'opponent-pokemon';
                     const name = computersPokemon.getAttribute('data-name');
                     const url = computersPokemon.getAttribute('data-image');
                     const hp = computersPokemon.getAttribute('data-hp');
                     const type = computersPokemon.getAttribute('data-type');
-
                     computersPokemonChoice.push(name, url, hp, type);
-                    // const computer = new Pokemon(name, type, hp, 'Water');//water is wrong dont use
                     appendPokemon(location, name, url);
                     startBattleButtonState(dataStateButton.ready);
-
-
-                }, 3500);//delay the choice so it looks like user is deliberating
+                }, 3500);
+                //delay the choice so it looks like user is deliberating
 
             }
             computerChoosePokemon();
         }
 
     };
-
+    //pokemon battle function
     const pokeFight = (pokemonOne, pokemonTwo) => {
-
         const playerPokemon = document.querySelector('#player-pokemon img');
         const opponentPokemon = document.querySelector('#opponent-pokemon img');
         const hpMeter = document.querySelector('.pokemon-hp h4');
@@ -178,25 +146,21 @@
         closeModal.addEventListener('click', function () {
             modal.style.display = 'none';
         });
-        //add animation here with delays
         pokemonOne.getWeakness(pokemonOne.type);
         pokemonTwo.getWeakness(pokemonTwo.type);
-        // do {
-        // backgroundMusic.pause();
         const battleMusic = new Audio();
         battleMusic.src = 'public/sounds/battle.mp3';
         battleMusic.play();
+        battleMusic.volume = .1;
         let startFight = setInterval(function () {
             //check to see if the fight should end
             if (pokemonOne.hp > 0 && pokemonTwo.hp > 0) {
                 if (pokemonOne.hp > 0) {
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
                     pokemonOne.attack(pokemonTwo);
-                    // playerPokemon.classList.add('up');
                     playerPokemon.classList.remove('down');
                     playerPokemon.classList.add('up');
                     setTimeout(function () {
-                        //  playerPokemon.classList.remove('up');
                         playerPokemon.classList.remove('up');
                         playerPokemon.classList.add('down');
                         hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
@@ -221,27 +185,23 @@
                 if (pokemonOne.hp <= 0 || pokemonTwo.hp <= 0) {
                     clearInterval(startFight);
                     battleMusic.pause();
-                    // backgroundMusic.play();
                     let winner = '';
                     //if pokemonOne hp is greater than 0 they're the winner else the winner is the other pokemon
                     pokemonOne.hp > 0 ? winner = 'Your ' + pokemonOne.name : winner = 'Opponents ' + pokemonTwo.name;
                     //change button here to reset the game
                     startBattleButtonState(dataStateButton.reset);
                     hpMeter.innerText = pokemonOne.hp + '|' + pokemonTwo.hp;
-
                     modal.style.display = 'block';
                     let modalMessage = modal.querySelector('.modal-body p');
                     modalMessage.innerText = `The winner is : ${winner}`
                     return;
-                    //return alert(`The winner is : ${winner}`);
-
                 }
             }
 
         }, 3000);
 
     }
-
+    //game start function
     const startGame = () => {
         if (!gameStart) {
             gameStart = true;
@@ -284,12 +244,11 @@
         //reset the button
         startBattleButtonState(dataStateButton.playerSelect);
     }
-
+    //fetch call to get pokemon from API
     const getPokemon = () => {
         showOrHideElement('show', '.loading');
         showOrHideElement('hide', '.error');
         const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=151&offset=0';
-        // const allPokemonURL = 'https://pokeapi.co/api/v2/pokemon?limit=3&offset=0';
         const response = fetch(allPokemonURL)
             .then((response) => {
                 const responseData = response.json();
@@ -302,16 +261,16 @@
             }).then((pokeURL) => {
                 showOrHideElement('hide', '.error');
                 startBattleButtonState(dataStateButton.playerSelect);
-
+                //need to loop over all pokemon URL's returned to get individual pokemon data from API
                 pokeURL.forEach(item => {
                     const singlePokeURL = item.url;
                     const response = fetch(singlePokeURL)
                         .then((response) => {
                             const responseData = response.json();
-
                             return responseData;
                         })
                         .then((responseData) => {
+                            //when there is a response set variables and place variables into DOM
                             let pokeName = responseData.forms[0].name;
                             const pokeImage = responseData.sprites.front_default;
                             pokeName = pokeName.charAt(0).toUpperCase() + pokeName.substring(1);
@@ -352,9 +311,7 @@
 
                             pText.appendChild(textNode);
 
-
-
-                            //before appending the first card remove the spinner
+                            //add event listener to each card created, get all attributes passed and send to choosePokemon function
                             document.querySelector('.pokemon-cards').appendChild(colmb4);
                             colmb4.addEventListener('click', (e) => {
                                 const pokemon = e.target.closest('.pokemon-card');
@@ -363,25 +320,19 @@
                                 const hp = pokemon.getAttribute('data-hp');
                                 const type = pokemon.getAttribute('data-type');
                                 choosePokemon(name, url, hp, type);
-                            })
+                            });
 
-                        })
-
-
-                })
+                        });
+                });
 
             })
             .catch((error) => {
-
                 showOrHideElement('show', '.error');
                 startBattleButtonState(dataStateButton.error);
-              
 
             }).finally(() => {
                 showOrHideElement('hide', '.loading');
             })
     }
-
     getPokemon();
-
 })();
